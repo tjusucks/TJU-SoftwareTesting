@@ -1,0 +1,5 @@
+{
+  "name": "blackbox-testing",
+  "description": "Skill for automated black-box testing based on the requirements specification.",
+  "version": "1.0.0"
+}

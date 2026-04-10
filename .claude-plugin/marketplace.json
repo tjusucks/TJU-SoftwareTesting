@@ -1,0 +1,19 @@
+{
+  "name": "software-testing-skills",
+  "owner": {
+    "name": "2edbef4a9b",
+    "email": "echofedn@outlook.com"
+  },
+  "metadata": {
+    "description": "Skills for software testing",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "blackbox-testing",
+      "description": "Skill for automated black-box testing based on the requirements specification.",
+      "source": "./Assignment 01/blackbox-testing",
+      "version": "1.0.0"
+    }
+  ]
+}
