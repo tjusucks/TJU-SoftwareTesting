@@ -4,3 +4,6 @@
 [submodule "Assignment 01/codebases/realworld/specification/upstream"]
 	path = Assignment 01/codebases/realworld/specification/upstream
 	url = https://github.com/realworld-apps/realworld.git
+[submodule "Assignment 01/codebases/realworld/implementations/golang-hexagonal"]
+	path = Assignment 01/codebases/realworld/implementations/golang-hexagonal
+	url = https://github.com/labasubagia/realworld-backend.git
