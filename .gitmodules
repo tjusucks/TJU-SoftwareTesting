@@ -1,3 +1,6 @@
 [submodule "Assignment 01/codebases/realworld/implementations/golang-gin"]
 	path = Assignment 01/codebases/realworld/implementations/golang-gin
 	url = https://github.com/gothinkster/golang-gin-realworld-example-app.git
+[submodule "Assignment 01/codebases/realworld/specification/upstream"]
+	path = Assignment 01/codebases/realworld/specification/upstream
+	url = https://github.com/realworld-apps/realworld.git
