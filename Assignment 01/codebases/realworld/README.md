@@ -59,7 +59,7 @@ go run hello.go
 
 ```bash
 cd "evaluations/golang-gin/tests"
-TEST_HOST=http://localhost:8080 go test ./... -v
+TEST_HOST=http://localhost:8080 go test ./... -v -count=1
 ```
 
 ### Step 2: 缺陷注入 (Buggy Run)
@@ -71,6 +71,13 @@ git -C "implementations/golang-gin" apply "../../bugs/golang-gin/auth-login-smok
 ```
 
 重启服务并再次运行 Step 1 中的测试。
+
+注意, Go test 默认会缓存结果。如果引入 patch 后直接重复执行测试, 可能看到和之前相同的 cached 结果, 导致误以为补丁没有影响。为确保在 clean 和 buggy 之间切换后测试会被强制重新执行, 请使用 `-count=1`, 例如:
+
+```bash
+cd "evaluations/golang-gin/tests"
+TEST_HOST=http://localhost:8080 go test ./... -v -count=1
+```
 
 ### Step 3: 恢复环境
 
@@ -99,6 +106,7 @@ git -C "implementations/golang-gin" apply -R "../../bugs/golang-gin/auth-login-s
 ## 5. 快速上手建议
 
 1. **先初始化 submodule**: clone 后先执行 `git submodule update --init --recursive`, 确保实现代码和上游规范都已拉取完整。
-2. **黑盒原则**: 测试仅通过 HTTP 调用接口, 不依赖内部代码。
-3. **适配 Baseline**: 若 Clean 实现与上游规范有细微差异 (如空串 vs null), 应调整测试代码以适配 Clean 实现。
-4. **扩展方向**: 优先基于 `article-lifecycle.md` 或 `comment-lifecycle.md` 生成新测试。
+2. **禁用测试缓存**: 在 clean 和 buggy 之间切换后, 运行 Go 测试时建议始终加上 `-count=1`, 避免读取 cached 结果。
+3. **黑盒原则**: 测试仅通过 HTTP 调用接口, 不依赖内部代码。
+4. **适配 Baseline**: 若 Clean 实现与上游规范有细微差异 (如空串 vs null), 应调整测试代码以适配 Clean 实现。
+5. **扩展方向**: 优先基于 `article-lifecycle.md` 或 `comment-lifecycle.md` 生成新测试。
