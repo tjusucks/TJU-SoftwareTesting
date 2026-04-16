@@ -2,6 +2,8 @@
 
 本项目通过“规范抽取 -> 测试生成 -> 缺陷注入 -> 运行对比”的工作流, 评估生成式测试对真实缺陷的发现能力。当前目标实现为 `golang-gin`。
 
+代码实现目录和上游规范目录均通过 Git submodule 引入, 因此在 clone 仓库后需要先初始化并拉取 submodule, 否则 `implementations/` 或 `specification/upstream/` 下的内容可能为空。
+
 ## 1. Claude Code 使用指南
 
 推荐使用外部免费 API 降低测试成本, 支持国内手机号注册。
@@ -21,6 +23,22 @@
 安装后可通过环境变量或配置文件指定 API 地址。若安装了对应 skill, 可直接使用 `/skillname` 调用。
 
 ## 2. 核心评估流程 (Clean vs Buggy)
+
+### Step 0: 初始化 submodule
+
+首次 clone 后, 请先在仓库根目录执行:
+
+```bash
+git submodule update --init --recursive
+```
+
+如果你还没有 clone 仓库, 也可以直接使用:
+
+```bash
+git clone --recursive <repository-url>
+```
+
+完成后再进入本目录继续后续步骤。
 
 ### Step 1: 运行 Clean Baseline
 
@@ -80,6 +98,7 @@ git -C "implementations/golang-gin" apply -R "../../bugs/golang-gin/auth-login-s
 
 ## 5. 快速上手建议
 
-1. **黑盒原则**: 测试仅通过 HTTP 调用接口, 不依赖内部代码。
-2. **适配 Baseline**: 若 Clean 实现与上游规范有细微差异 (如空串 vs null), 应调整测试代码以适配 Clean 实现。
-3. **扩展方向**: 优先基于 `article-lifecycle.md` 或 `comment-lifecycle.md` 生成新测试。
+1. **先初始化 submodule**: clone 后先执行 `git submodule update --init --recursive`, 确保实现代码和上游规范都已拉取完整。
+2. **黑盒原则**: 测试仅通过 HTTP 调用接口, 不依赖内部代码。
+3. **适配 Baseline**: 若 Clean 实现与上游规范有细微差异 (如空串 vs null), 应调整测试代码以适配 Clean 实现。
+4. **扩展方向**: 优先基于 `article-lifecycle.md` 或 `comment-lifecycle.md` 生成新测试。
