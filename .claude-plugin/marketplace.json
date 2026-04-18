@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Skills for software testing",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "blackbox-testing",
       "description": "Skill for automated black-box testing based on the requirements specification.",
       "source": "./Assignment 01/blackbox-testing",
-      "version": "1.0.0"
+      "version": "1.0.1"
     }
   ]
 }
