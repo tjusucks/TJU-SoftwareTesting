@@ -1,5 +1,9 @@
 {
   "name": "blackbox-testing",
   "description": "Skill for automated black-box testing based on the requirements specification.",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "commands": [
+    "./skills/SKILL.md",
+    "./skills/SKILL2.md"
+  ]
 }
