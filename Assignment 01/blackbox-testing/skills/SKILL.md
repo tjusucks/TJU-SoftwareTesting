@@ -43,6 +43,9 @@ Given the provided specification, you must:
 3. Cover normal flows, alternative flows, invalid inputs, boundary conditions, error handling, and edge cases.
 4. Detect ambiguities, contradictions, and missing requirements that may affect testing.
 5. Produce clear, structured, and actionable test cases.
+6. Treat edge-case coverage as a mandatory quality goal, not an optional enhancement.
+7. For every requirement or business rule, actively search for omission cases, boundary values, invalid partitions, sequencing edges, state-related edges, and rule-conflict combinations.
+8. Do not stop at one happy path plus one invalid case when the specification implies additional meaningful edge coverage.
 
 Do not assume access to internal logic, source code, database schema, or implementation-specific details unless explicitly provided as part of the requirements.
 
@@ -52,7 +55,7 @@ Follow this workflow strictly:
 
 ### Step 1: Understand the specification
 
-- Read the full requirement carefully. If users don't provide the requirement specification, ask for it before proceeding.
+- Read the full requirement carefully. If users don't provide the requirement specification, ask them to provide it before proceeding.
 - Summarize the system or feature under test in a few concise bullet points.
 - Extract:
   - functional requirements
@@ -83,6 +86,30 @@ For each requirement, identify relevant black-box testing dimensions, such as:
 - permission/role-based behavior if described
 - timing or sequencing behavior if described
 
+For each requirement, explicitly check whether these edge-oriented dimensions apply:
+
+- minimum valid value
+- maximum valid value
+- just-below-minimum value
+- just-above-maximum value
+- empty value
+- null value
+- missing field / omitted input
+- wrong type
+- malformed format
+- duplicate input
+- conflicting inputs
+- unsupported but syntactically valid input
+- repeated action
+- out-of-order action
+- unauthorized actor
+- expired / stale / previously valid state
+- resource does not exist
+- already deleted / already consumed / already used state
+- combination of individually valid inputs that may fail together
+
+Do not merely mention these dimensions. For each applicable dimension, derive at least one concrete scenario or explicitly state why it does not apply.
+
 ### Step 3: Derive test scenarios
 
 Generate a comprehensive list of test scenarios that collectively cover:
@@ -96,7 +123,40 @@ Generate a comprehensive list of test scenarios that collectively cover:
 - failure handling and system responses
 - usability-relevant observable behavior where specified
 
-### Step 4: Write detailed test cases
+Ensure the scenario set is not dominated by happy-path cases.
+
+At minimum, for each major requirement or business rule, consider:
+
+- one representative normal case
+- one representative invalid or rejection case, if applicable
+- one representative boundary or edge case, if applicable
+- one omission or missing-input case, if applicable
+- one state or sequencing edge case, if the feature is stateful or ordered
+
+If a category does not apply, explicitly say so.
+
+### Step 4: Enumerate edge-case candidates
+
+Before writing detailed test cases, create an Edge-Case Candidate List for each requirement ID.
+
+For each requirement, list:
+
+- relevant boundaries
+- omission cases
+- invalid partitions
+- state-related edges
+- sequencing edges
+- interaction / combinational edges
+
+Then decide for each candidate whether it will become:
+
+- a detailed test case
+- a lower-priority deferred case
+- a non-applicable item with explanation
+
+Do not proceed to detailed test cases until this enumeration is complete.
+
+### Step 5: Write detailed test cases
 
 For each scenario, write test cases with the following fields when possible:
 
@@ -112,7 +172,7 @@ For each scenario, write test cases with the following fields when possible:
 
 Make the expected result specific and verifiable.
 
-### Step 5: Review coverage
+### Step 6: Review coverage
 
 Before finishing, check whether the generated tests adequately cover:
 
@@ -122,9 +182,29 @@ Before finishing, check whether the generated tests adequately cover:
 - each relevant boundary
 - each documented error condition
 
+In the coverage review, explicitly verify and report:
+
+- requirement-to-test traceability for every requirement ID
+- whether each requirement has at least one normal case
+- whether each requirement has at least one negative or error case, if applicable
+- whether each input field has boundary coverage, if applicable
+- whether omission / null / missing-field behavior has been considered
+- whether invalid-format and wrong-type cases have been considered
+- whether state and sequencing edge cases have been considered
+- whether multi-input combinations introduce additional edge behavior
+
+If any of the above is missing, state it clearly in `Coverage Summary` as uncovered or partially covered.
+
+Before finalizing, perform one adversarial review pass:
+
+- ask what failures would escape the current tests
+- ask which input classes are underrepresented
+- ask which edge conditions are implied by the requirements but not yet tested
+- add missing cases if they are supported by the specification
+
 If something cannot be tested due to missing information, explicitly state that.
 
-### Step 6: Report ambiguities and gaps
+### Step 7 Report ambiguities and gaps
 
 Create a separate section listing:
 
@@ -145,9 +225,10 @@ Your output must be organized into the following sections:
 2. Requirements Extracted
 3. Test Design Strategy
 4. Test Scenarios
-5. Detailed Test Cases
-6. Coverage Summary
-7. Ambiguities / Missing Information / Assumptions
+5. Edge Case Matrix
+6. Detailed Test Cases
+7. Coverage Summary
+8. Ambiguities / Missing Information / Assumptions
 
 ## Evaluation Metrics (Recommended)
 
@@ -168,6 +249,12 @@ Keep outputs directly consumable by execution and evaluation teammates:
 - Preserve exact column names in `Detailed Test Cases`.
 - Ensure every test case maps to one or more requirement IDs.
 - If a requirement is uncovered, explicitly mark it in `Coverage Summary` with a reason.
+- In `Edge Case Matrix`, include these exact columns:
+  - Requirement ID
+  - Edge Category
+  - Concrete Case
+  - Covered by Test Case ID
+  - Notes
 
 ## Test Design Guidance
 
