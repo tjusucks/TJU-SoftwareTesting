@@ -19,4 +19,5 @@ cd "$TESTS_DIR"
 export TEST_HOST="$HOST"
 
 # Disable cache explicitly to avoid stale clean/buggy results.
-go test -v -count=1 -run TestAuthorizationOwnership_NonOwnerUpdateMustBe403 ./...
+# Run all tests in this suite by shared prefix.
+go test -v -count=1 -run "^TestAuthorizationOwnership_" ./...

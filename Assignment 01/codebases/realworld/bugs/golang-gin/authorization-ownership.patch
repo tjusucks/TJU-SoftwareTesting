@@ -1,13 +1,13 @@
 diff --git a/articles/routers.go b/articles/routers.go
-index 3aea0b5..1fe2d30 100644
+index 3aea0b5..b1e8513 100644
 --- a/articles/routers.go
 +++ b/articles/routers.go
-@@ -107,7 +107,7 @@ func ArticleUpdate(c *gin.Context) {
- 	myUserModel := c.MustGet("my_user_model").(users.UserModel)
- 	articleUserModel := GetArticleUserModel(myUserModel)
- 	if articleModel.AuthorID != articleUserModel.ID {
--		c.JSON(http.StatusForbidden, common.NewError("article", errors.New("you are not the author")))
-+		c.JSON(http.StatusOK, common.NewError("article", errors.New("you are not the author")))
- 		return
- 	}
- 
+@@ -212,7 +212,7 @@ func ArticleCommentDelete(c *gin.Context) {
+ 		// Comment exists, check authorization
+ 		myUserModel := c.MustGet("my_user_model").(users.UserModel)
+ 		articleUserModel := GetArticleUserModel(myUserModel)
+-		if commentModel.AuthorID != articleUserModel.ID {
++		if commentModel.Article.AuthorID != articleUserModel.ID {
+ 			c.JSON(http.StatusForbidden, common.NewError("comment", errors.New("you are not the author")))
+ 			return
+ 		}
