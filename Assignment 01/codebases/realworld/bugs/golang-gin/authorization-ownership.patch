@@ -1,0 +1,13 @@
+diff --git a/articles/routers.go b/articles/routers.go
+index 3aea0b5..1fe2d30 100644
+--- a/articles/routers.go
++++ b/articles/routers.go
+@@ -107,7 +107,7 @@ func ArticleUpdate(c *gin.Context) {
+ 	myUserModel := c.MustGet("my_user_model").(users.UserModel)
+ 	articleUserModel := GetArticleUserModel(myUserModel)
+ 	if articleModel.AuthorID != articleUserModel.ID {
+-		c.JSON(http.StatusForbidden, common.NewError("article", errors.New("you are not the author")))
++		c.JSON(http.StatusOK, common.NewError("article", errors.New("you are not the author")))
+ 		return
+ 	}
+ 
