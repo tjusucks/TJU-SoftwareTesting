@@ -219,16 +219,17 @@ Clearly label assumptions as assumptions.
 
 ## Output Requirements
 
-Your output must be organized into the following sections:
+Your output must be a single structured report following the template at `skills/assets/template.md`.
 
-1. Feature Summary
-2. Requirements Extracted
-3. Test Design Strategy
-4. Test Scenarios
-5. Edge Case Matrix
-6. Detailed Test Cases
-7. Coverage Summary
-8. Ambiguities / Missing Information / Assumptions
+Do not invent a new report structure. Reuse the template's section order, section titles, and table shapes as closely as possible.
+
+When generating the final output:
+
+1. Fill in all applicable sections from `skills/assets/template.md`.
+2. If a section is not applicable, keep the section and explicitly mark it as `N/A` with a short reason.
+3. If information is missing from the input, keep the relevant section and note the gap instead of omitting it.
+4. Keep requirement IDs, test scenario IDs, EP/BVA IDs, and test case IDs traceable throughout the report.
+5. When executable test code is produced or expected, fill the `How to Run the Generated Test Codes` section with concrete commands, paths, environment setup notes, and cache-related rerun guidance when applicable.
 
 ## Evaluation Metrics (Recommended)
 
@@ -245,16 +246,11 @@ Use the same input pack and the same rubric when comparing multiple prompt versi
 
 Keep outputs directly consumable by execution and evaluation teammates:
 
-- Preserve exact section names from Output Requirements.
-- Preserve exact column names in `Detailed Test Cases`.
+- Preserve the section names and overall structure from `skills/assets/template.md`.
+- Preserve the table column names from the template, especially in `Equivalence Partitioning Analysis`, `Boundary Value Analysis`, `Detailed Test Cases`, `How to Run the Generated Test Codes`, and `Coverage Summary`.
 - Ensure every test case maps to one or more requirement IDs.
 - If a requirement is uncovered, explicitly mark it in `Coverage Summary` with a reason.
-- In `Edge Case Matrix`, include these exact columns:
-  - Requirement ID
-  - Edge Category
-  - Concrete Case
-  - Covered by Test Case ID
-  - Notes
+- If executable test code is included, provide enough run information for another teammate to execute it without guessing the environment setup or commands.
 
 ## Test Design Guidance
 
@@ -292,11 +288,14 @@ Your test cases must be:
 
 ## Default Output Style
 
-Unless the user asks otherwise, present:
+Unless the user asks otherwise, present the final answer as a completed report based on `skills/assets/template.md`.
 
-- a short summary first,
-- then a structured test scenario list,
-- then a detailed test case table in markdown.
+Within that report:
+
+- keep the template section order,
+- keep the markdown tables,
+- use concise but specific content,
+- and prefer directly reusable commands and test artifacts where applicable.
 
 ## If the Input Is Weak or Incomplete
 
@@ -310,3 +309,5 @@ If the provided specification is too vague to generate reliable test cases:
 ## Final Instruction
 
 Your goal is to transform a requirements specification into a practical black-box testing artifact that a QA engineer can immediately use for review, manual testing, or conversion into automated tests.
+
+The final deliverable should be a completed report aligned with `skills/assets/template.md`, rather than an ad hoc free-form response.
