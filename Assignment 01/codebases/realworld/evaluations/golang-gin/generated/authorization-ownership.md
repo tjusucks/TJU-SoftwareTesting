@@ -2,22 +2,37 @@
 
 ## Feature Summary
 
-This suite validates ownership-based authorization for article updates.
+This suite validates ownership authorization with both article and comment resources, including side-effect checks after forbidden operations.
 
-- User A creates an article.
-- User B (authenticated but non-owner) attempts to update User A's article.
-- The operation must be rejected with status 403.
-- The original article content must remain unchanged after the forbidden attempt.
+Covered behavior:
 
-## Endpoint Under Test
+- non-owner cannot update another user's article
+- article owner cannot delete another user's comment
+- comment owner can delete own comment even on another user's article
+- forbidden or unauthenticated deletion attempts do not mutate existing comments
 
-| Endpoint              | Method | Purpose                                   |
-| --------------------- | ------ | ----------------------------------------- |
-| `/api/articles`       | POST   | Create article as owner (User A)          |
-| `/api/articles/:slug` | PUT    | Non-owner update attempt (User B)         |
-| `/api/articles/:slug` | GET    | Verify resource unchanged after rejection |
+## Endpoints Under Test
+
+| Endpoint                         | Method | Purpose                            |
+| -------------------------------- | ------ | ---------------------------------- |
+| /api/users                       | POST   | register users A, B, C             |
+| /api/articles                    | POST   | create article as owner            |
+| /api/articles/:slug              | PUT    | verify non-owner update forbidden  |
+| /api/articles/:slug/comments     | POST   | create comment                     |
+| /api/articles/:slug/comments     | GET    | verify persistence/non-persistence |
+| /api/articles/:slug/comments/:id | DELETE | verify ownership and auth checks   |
+
+## Scenarios
+
+1. Non-owner update article must be 403 and article body unchanged
+2. Article owner deleting another user's comment must be 403 and comment remains
+3. Comment owner deleting own comment on another user's article must succeed
+4. Forbidden comment delete attempt must not remove or mutate comments
+5. Unauthenticated comment delete must be 401 and comment remains
 
 ## Acceptance Criteria Covered
 
-- non-owner update attempt on article returns 403
-- forbidden operation does not mutate the original article
+- authenticated but unauthorized operations return 403
+- unauthenticated delete returns 401
+- failed operations are non-destructive
+- ownership is based on comment author for comment deletion, not article owner
