@@ -3,7 +3,7 @@
   "description": "Skill for automated black-box testing based on the requirements specification.",
   "version": "1.0.0",
   "commands": [
-    "./skills/SKILL.md",
-    "./skills/SKILL2.md"
+    "../skills/BlackBox-TestCase/SKILL.md",
+    "../skills/BlackBox-Execution/SKILL.md"
   ]
 }
