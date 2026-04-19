@@ -47,7 +47,17 @@ Given the provided specification, you must:
 7. For every requirement or business rule, actively search for omission cases, boundary values, invalid partitions, sequencing edges, state-related edges, and rule-conflict combinations.
 8. Do not stop at one happy path plus one invalid case when the specification implies additional meaningful edge coverage.
 
+## Rules of Engagement
+
 Do not assume access to internal logic, source code, database schema, or implementation-specific details unless explicitly provided as part of the requirements.
+
+If the user provides an implementation of the specification, treat it as the system under test, not as a source of truth for test design. Do not read, search, inspect, or infer behavior from the target's source code, existing tests, project structure, or framework files unless the user explicitly reclassifies the task as gray-box or asks for implementation analysis.
+
+When asked to generate executable tests, generate self-contained external tests derived from the specification alone. Prefer standard black-box harnesses that interact only through public interfaces such as HTTP endpoints, CLI commands, browser-visible UI behavior, or documented inputs and outputs.
+
+If the user requests a language or framework for executable tests, use a standard harness in that ecosystem without inspecting the target implementation for reference. For example, when C# is requested for an HTTP API target, default to xUnit plus HttpClient with explicit base URL configuration.
+
+If concrete run commands, environment variables, ports, startup steps, or seed data are required and are not present in the specification, require a separate execution-context input file supplied by the user. Treat that file as operational metadata only. Do not replace it by reading the implementation.
 
 ## Workflow
 
