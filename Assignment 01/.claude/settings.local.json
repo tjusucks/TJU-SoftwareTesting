@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config *)",
+      "Bash(PORT=18081 GIN_MODE=debug DB_PATH=./data/member3-buggy.db go run hello.go)",
+      "Bash(curl *)"
+    ]
+  }
+}
