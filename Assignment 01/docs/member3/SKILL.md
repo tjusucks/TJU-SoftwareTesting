@@ -294,6 +294,7 @@ Keep outputs directly consumable by execution and evaluation teammates:
 When useful, include exact columns in structured tables such as:
 
 ### `Environment Check`
+
 - `Target`
 - `Check`
 - `Required`
@@ -301,6 +302,7 @@ When useful, include exact columns in structured tables such as:
 - `Evidence/Notes`
 
 ### `API Execution Assets`
+
 - `Asset Type`
 - `Suggested Path`
 - `Covered Test Case IDs`
@@ -308,6 +310,7 @@ When useful, include exact columns in structured tables such as:
 - `Notes`
 
 ### `UI Execution Assets`
+
 - `Asset Type`
 - `Suggested Path`
 - `Covered Test Case IDs`
@@ -315,6 +318,7 @@ When useful, include exact columns in structured tables such as:
 - `Notes`
 
 ### `Execution Results Report`
+
 - `Asset/Command`
 - `Scope`
 - `Status`
@@ -323,6 +327,7 @@ When useful, include exact columns in structured tables such as:
 - `Classification`
 
 ### `Blocked / Deferred Cases`
+
 - `Test Case ID`
 - `Requirement Reference`
 - `Status`
