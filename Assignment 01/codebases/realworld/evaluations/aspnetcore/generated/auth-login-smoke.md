@@ -10,7 +10,7 @@
 | Date                                     | 2026-04-19                                                                                            |
 | Author / Operator                        | Claude (blackbox-testing skill)                                                                       |
 | Skill / Tool Name                        | `blackbox-testing`                                                                                    |
-| Model / Agent Version                    | claude-opus-4-7                                                                                       |
+| Model / Agent Version                    | glm-5.1                                                                                               |
 | Prompt Version                           | 1.0                                                                                                   |
 | Input Type                               | Requirement / API Spec (Mixed)                                                                        |
 | Input Source Path / Link                 | `Assignment 01/codebases/realworld/specification/features/auth-login-smoke.md` + upstream bruno specs |
