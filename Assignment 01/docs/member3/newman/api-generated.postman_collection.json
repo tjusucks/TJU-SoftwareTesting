@@ -1,0 +1,596 @@
+{
+  "info": {
+    "name": "member3-generated-api-tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Generated from docs/member3/generated-blackbox-output-v1.md and aligned with SKILL2. Covers RealWorld API cases R1-R8 with traceable request names."
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if (!pm.environment.get('uid')) {",
+          "  const uid = String(Date.now());",
+          "  pm.environment.set('uid', uid);",
+          "  pm.environment.set('USERNAME', `member3_user_${uid}`);",
+          "  pm.environment.set('EMAIL', `member3_${uid}@example.com`);",
+          "  pm.environment.set('SECOND_USERNAME', `member3_other_${uid}`);",
+          "  pm.environment.set('SECOND_EMAIL', `member3_other_${uid}@example.com`);",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth and User",
+      "item": [
+        {
+          "name": "TC-001 R1 Register new user successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('status is success', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('user object returned', function () { pm.expect(body).to.have.property('user'); });",
+                  "pm.test('token returned', function () { pm.expect(body.user.token).to.be.a('string').and.not.empty; });",
+                  "pm.environment.set('token', body.user.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{EMAIL}}\",\"password\":\"{{PASSWORD}}\",\"username\":\"{{USERNAME}}\"}}"
+            },
+            "url": "{{APIURL}}/users"
+          }
+        },
+        {
+          "name": "TC-002 R1 Reject duplicate username on registration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('duplicate username rejected', function () { pm.expect([409, 422]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('no success token returned', function () { pm.expect(body.user).to.equal(undefined); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"duplicate_{{uid}}@example.com\",\"password\":\"{{PASSWORD}}\",\"username\":\"{{USERNAME}}\"}}"
+            },
+            "url": "{{APIURL}}/users"
+          }
+        },
+        {
+          "name": "TC-003 R1 Reject duplicate email on registration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('duplicate email rejected', function () { pm.expect([409, 422]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('no success token returned', function () { pm.expect(body.user).to.equal(undefined); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{EMAIL}}\",\"password\":\"{{PASSWORD}}\",\"username\":\"duplicate_email_{{uid}}\"}}"
+            },
+            "url": "{{APIURL}}/users"
+          }
+        },
+        {
+          "name": "TC-004 R2 Login with valid credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('login succeeds', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('token returned', function () { pm.expect(body.user.token).to.be.a('string').and.not.empty; });",
+                  "pm.environment.set('token', body.user.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{EMAIL}}\",\"password\":\"{{PASSWORD}}\"}}"
+            },
+            "url": "{{APIURL}}/users/login"
+          }
+        },
+        {
+          "name": "TC-005 R2 Reject invalid login credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('wrong password rejected', function () { pm.expect([401, 422]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{EMAIL}}\",\"password\":\"wrongpassword\"}}"
+            },
+            "url": "{{APIURL}}/users/login"
+          }
+        },
+        {
+          "name": "TC-006 R2 Reject malformed login payload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('malformed login rejected', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"email\":\"{{EMAIL}}\"}" },
+            "url": "{{APIURL}}/users/login"
+          }
+        },
+        {
+          "name": "TC-008 R3 Reject current user access without token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('missing token rejected', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{APIURL}}/user"
+          }
+        },
+        {
+          "name": "TC-007 R3 Get current user with valid token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('authorized current user succeeds', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('current user matches registration email', function () { pm.expect(body.user.email).to.eql(pm.environment.get('EMAIL')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+            "url": "{{APIURL}}/user"
+          }
+        },
+        {
+          "name": "TC-009 R3 Update current user and persist supported fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('update succeeds', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('bio updated', function () { pm.expect(body.user.bio).to.eql(pm.environment.get('BIO')); });",
+                  "pm.test('image updated', function () { pm.expect(body.user.image).to.eql(pm.environment.get('IMAGE')); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"bio\":\"{{BIO}}\",\"image\":\"{{IMAGE}}\"}}"
+            },
+            "url": "{{APIURL}}/user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Articles and Social",
+      "item": [
+        {
+          "name": "TC-010 R4 Create article successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('article create succeeds', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('slug', body.article.slug);",
+                  "pm.test('article has slug', function () { pm.expect(body.article.slug).to.be.a('string').and.not.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"title\":\"member3 article {{uid}}\",\"description\":\"desc\",\"body\":\"body\"}}"
+            },
+            "url": "{{APIURL}}/articles"
+          }
+        },
+        {
+          "name": "TC-011 R4 Reject malformed article payload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('malformed article rejected', function () { pm.expect([400, 401, 422]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"title\":\"member3 invalid\",\"body\":\"body only\"}}"
+            },
+            "url": "{{APIURL}}/articles"
+          }
+        },
+        {
+          "name": "TC-012 R5 Allow article owner to update own article",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('owner update succeeds', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('article description updated', function () { pm.expect(body.article.description).to.eql('updated desc'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"description\":\"updated desc\"}}"
+            },
+            "url": "{{APIURL}}/articles/{{slug}}"
+          }
+        },
+        {
+          "name": "Bootstrap second user for ownership checks",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('second user registered', function () { pm.expect([200, 201]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{SECOND_EMAIL}}\",\"password\":\"{{PASSWORD}}\",\"username\":\"{{SECOND_USERNAME}}\"}}"
+            },
+            "url": "{{APIURL}}/users"
+          }
+        },
+        {
+          "name": "Login second user and remember token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('second user login succeeds', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('secondToken', body.user.token);",
+                  "pm.environment.set('followTarget', pm.environment.get('SECOND_USERNAME'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user\":{\"email\":\"{{SECOND_EMAIL}}\",\"password\":\"{{PASSWORD}}\"}}"
+            },
+            "url": "{{APIURL}}/users/login"
+          }
+        },
+        {
+          "name": "TC-013 R5 Forbid non-owner article mutation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('non-owner update forbidden', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{secondToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"article\":{\"description\":\"illegal update\"}}"
+            },
+            "url": "{{APIURL}}/articles/{{slug}}"
+          }
+        },
+        {
+          "name": "TC-014 R5 Return not found for missing article slug mutation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('missing slug returns not found', function () { pm.expect([404]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+            "url": "{{APIURL}}/articles/member3-missing-slug"
+          }
+        },
+        {
+          "name": "TC-015 R6 Toggle follow state with auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('follow succeeds', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.test('following is true', function () { pm.expect(body.profile.following).to.eql(true); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+            "url": "{{APIURL}}/profiles/{{followTarget}}/follow"
+          }
+        },
+        {
+          "name": "TC-016 R6 Reject follow without auth",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('missing auth follow rejected', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{APIURL}}/profiles/{{followTarget}}/follow"
+          }
+        },
+        {
+          "name": "TC-017 R7 Filter articles with valid pagination bounds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('article list succeeds', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('articles array returned', function () { pm.expect(body.articles).to.be.an('array'); });",
+                  "pm.test('respects limit upper count', function () { pm.expect(body.articles.length).to.be.at.most(1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{APIURL}}/articles?limit=1&offset=0"
+          }
+        },
+        {
+          "name": "TC-018 R7 Reject invalid pagination bounds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('invalid bounds rejected', function () { pm.expect([400, 422]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{APIURL}}/articles?limit=0&offset=-1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "TC-019 R8 Create and delete own comment successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('comment create succeeds', function () { pm.expect([200, 201]).to.include(pm.response.code); });",
+                  "const body = pm.response.json();",
+                  "pm.environment.set('commentId', String(body.comment.id));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Token {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"comment\":{\"body\":\"member3 comment\"}}"
+            },
+            "url": "{{APIURL}}/articles/{{slug}}/comments"
+          }
+        },
+        {
+          "name": "TC-020 R8 Enforce comment ownership and missing-resource errors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('non-owner delete forbidden', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Token {{secondToken}}" }],
+            "url": "{{APIURL}}/articles/{{slug}}/comments/{{commentId}}"
+          }
+        },
+        {
+          "name": "TC-019 R8 Delete own comment successfully",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('owner delete succeeds', function () { pm.expect([200, 204]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+            "url": "{{APIURL}}/articles/{{slug}}/comments/{{commentId}}"
+          }
+        },
+        {
+          "name": "TC-020 R8 Missing comment resource returns not found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('missing comment rejected', function () { pm.expect([404]).to.include(pm.response.code); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+            "url": "{{APIURL}}/articles/{{slug}}/comments/99999999"
+          }
+        }
+      ]
+    }
+  ]
+}
