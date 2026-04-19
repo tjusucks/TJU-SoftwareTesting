@@ -7,3 +7,6 @@
 [submodule "Assignment 01/codebases/realworld/implementations/golang-hexagonal"]
 	path = Assignment 01/codebases/realworld/implementations/golang-hexagonal
 	url = https://github.com/labasubagia/realworld-backend.git
+[submodule "Assignment 01/codebases/realworld/implementations/aspnetcore"]
+	path = Assignment 01/codebases/realworld/implementations/aspnetcore
+	url = https://github.com/gothinkster/aspnetcore-realworld-example-app.git
