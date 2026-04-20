@@ -79,6 +79,24 @@ claude plugin remove blackbox-testing@software-testing-skills
 5. Review the execution results, distinguish real defects from spec/implementation mismatches, and refine the prompt or skill if needed.
 6. Summarize the final outputs as submission artifacts, including inputs, prompts, generated code, execution evidence, and analysis.
 
+## Experimental Setup
+
+### Target System
+
+- [RealWorld Example Applications](https://github.com/realworld-apps/realworld)
+- [Golang Gin Implementation](https://github.com/gothinkster/golang-gin-realworld-example-app)
+- [ASP.NET Core Implementation](https://github.com/gothinkster/aspnetcore-realworld-example-app)
+
+### Model
+
+- GLM 5.1 via [NVIDIA NIM API](https://build.nvidia.com/models) (OpenAI Compatible)
+- Minimax M2.7 via [NVIDIA NIM API](https://build.nvidia.com/models) (OpenAI Compatible)
+
+### Tools
+
+- Claude Code: Skill integration and execution.
+- Claude Code Router: Convert OpenAI compatible API to Anthropic API for Claude Code.
+
 ## Input Artifacts
 
 ### Main Prompt
