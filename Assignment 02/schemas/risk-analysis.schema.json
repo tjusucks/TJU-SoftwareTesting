@@ -4,11 +4,7 @@
   "title": "RiskAnalysis",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "feature_id",
-    "items"
-  ],
+  "required": ["schema_version", "feature_id", "items"],
   "properties": {
     "schema_version": {
       "type": "string",
@@ -40,7 +36,6 @@
         ],
 
         "properties": {
-
           "risk_id": {
             "type": "string",
             "pattern": "^RK[0-9]+$"
@@ -96,11 +91,7 @@
 
           "priority": {
             "type": "string",
-            "enum": [
-              "High",
-              "Medium",
-              "Low"
-            ]
+            "enum": ["High", "Medium", "Low"]
           },
 
           "rationale": {
@@ -119,4 +110,3 @@
     }
   }
 }
-

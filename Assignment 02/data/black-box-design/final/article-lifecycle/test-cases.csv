@@ -1,0 +1,19 @@
+test_case_id,title,requirement_ids,priority,preconditions,test_data,steps,expected_result,techniques,coverage_item_ids
+TC-001,Reject unauthenticated create,"R1|R8",High,None,Missing Authorization header,POST /articles without Authorization header,Request is rejected as unauthorized,EP,CI-1
+TC-002,Create article with valid payload,R2,High,Valid user token,Non-empty title/description/body,POST /articles with valid token and non-empty title/description/body,HTTP 201 and created article object returned,EP|BVA,CI-2
+TC-003,Verify create response fields,R3,High,TC-002 succeeded,Successful create response,Inspect successful create response payload,"Response includes title, slug, description, body, tagList, createdAt, updatedAt, favorited, favoritesCount, author.username",EP,CI-2
+TC-004,Duplicate title unique slug,R4,Medium,Valid user token,Same title used twice,Create two articles with identical title,Both creates succeed and returned slugs differ,EP|BVA,CI-3
+TC-005,Empty title rejected,R5,High,Valid user token,title=empty string,POST /articles with empty title,Validation error returned,EP|BVA,CI-4
+TC-006,Empty description rejected,R6,High,Valid user token,description=empty string,POST /articles with empty description,Validation error returned,EP|BVA,CI-5
+TC-007,Empty body rejected,R7,High,Valid user token,body=empty string,POST /articles with empty body,Validation error returned,EP|BVA,CI-6
+TC-008,Owner updates body,R9,High,Existing owned article,new body text,PUT /articles/{slug} with owner token and new body,Update succeeds and body reflects new value,EP,CI-7
+TC-009,Partial update preserves fields,R10,High,Existing owned article,update body only,PUT only body then GET same slug,Unmodified fields remain unchanged,EP,CI-7
+TC-010,Omitted tagList preserves tags,R11,High,Existing tagged article,tagList omitted,PUT update payload without tagList field,Existing tags remain unchanged,DT,CI-8
+TC-011,Empty tagList clears tags,R12,High,Existing tagged article,tagList=[],PUT update payload with tagList=[],Article tagList becomes empty,DT|BVA,CI-8
+TC-012,Null tagList rejected,R13,High,Existing tagged article,tagList=null,PUT update payload with tagList=null,Validation error returned,DT|BVA,CI-8
+TC-013,Non-empty tagList replaces tags,"R11|R12",High,Existing tagged article,tagList=['newTag'],PUT update payload with tagList=['newTag'],Article tagList replaced by supplied values,DT,CI-8
+TC-014,Owner delete succeeds,R15,High,Existing owned article,target slug,DELETE /articles/{slug} with owner token,Delete succeeds with success status,EP,CI-10
+TC-015,Updated article remains updated,R14,Medium,TC-008 performed,updated slug,GET /articles/{slug} after successful update,GET response reflects updated state,Scenario,CI-9
+TC-016,Deleted article cannot be fetched,R16,Medium,TC-014 performed,deleted slug,GET /articles/{slug} after successful delete,Retrieval fails after deletion; 404 not-found style response is preferred and any equivalent not-found contract is acceptable.,Scenario,CI-11
+TC-017,Unauthenticated update rejected,R9,High,Existing article,Missing Authorization header,PUT /articles/{slug} without Authorization header,Update request is rejected as unauthorized,EP,CI-12
+TC-018,Unauthenticated delete rejected,R15,High,Existing article,Missing Authorization header,DELETE /articles/{slug} without Authorization header,Delete request is rejected as unauthorized,EP,CI-12

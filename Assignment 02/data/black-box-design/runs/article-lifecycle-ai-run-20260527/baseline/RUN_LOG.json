@@ -1,0 +1,9 @@
+{
+  "execution_mode": "ai_skill",
+  "runtime": "Cursor Agent",
+  "skill": "black-box-design",
+  "run_id": "A2-BB-AI-ARTICLE-LIFECYCLE-R0",
+  "revision": 0,
+  "prompt_version": "v1.0",
+  "test_case_count": 16
+}
