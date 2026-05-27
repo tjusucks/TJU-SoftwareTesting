@@ -1,0 +1,779 @@
+{
+  "schema_version": "1.0",
+  "run_metadata": {
+    "run_id": "A2-BB-AI-ARTICLE-LIFECYCLE-R0",
+    "feature_id": "article-lifecycle",
+    "prompt_version": "v1.0",
+    "revision": 0,
+    "generated_at": "2026-05-27T16:09:51+08:00",
+    "execution_mode": "ai_skill",
+    "runtime": "Cursor Agent",
+    "skill_path": "Assignment 02/skills/black-box-design/SKILL.md"
+  },
+  "coverage_items": [
+    {
+      "id": "CI-1",
+      "requirement_ids": [
+        "R1",
+        "R8"
+      ],
+      "technique": "EP",
+      "description": "Create authentication gate and unauthorized rejection"
+    },
+    {
+      "id": "CI-2",
+      "requirement_ids": [
+        "R2",
+        "R3"
+      ],
+      "technique": "EP",
+      "description": "Successful create response contract"
+    },
+    {
+      "id": "CI-3",
+      "requirement_ids": [
+        "R4"
+      ],
+      "technique": "EP",
+      "description": "Duplicate title with unique slug generation"
+    },
+    {
+      "id": "CI-4",
+      "requirement_ids": [
+        "R5"
+      ],
+      "technique": "EP",
+      "description": "Empty title validation rejection"
+    },
+    {
+      "id": "CI-5",
+      "requirement_ids": [
+        "R6"
+      ],
+      "technique": "EP",
+      "description": "Empty description validation rejection"
+    },
+    {
+      "id": "CI-6",
+      "requirement_ids": [
+        "R7"
+      ],
+      "technique": "EP",
+      "description": "Empty body validation rejection"
+    },
+    {
+      "id": "CI-7",
+      "requirement_ids": [
+        "R9",
+        "R10"
+      ],
+      "technique": "EP",
+      "description": "Owner update success and partial update preservation"
+    },
+    {
+      "id": "CI-8",
+      "requirement_ids": [
+        "R11",
+        "R12",
+        "R13"
+      ],
+      "technique": "DT",
+      "description": "tagList update decision combinations"
+    },
+    {
+      "id": "CI-9",
+      "requirement_ids": [
+        "R14"
+      ],
+      "technique": "Scenario",
+      "description": "Update persistence observable via follow-up GET"
+    },
+    {
+      "id": "CI-10",
+      "requirement_ids": [
+        "R15"
+      ],
+      "technique": "EP",
+      "description": "Owner delete success path"
+    },
+    {
+      "id": "CI-11",
+      "requirement_ids": [
+        "R16"
+      ],
+      "technique": "Scenario",
+      "description": "Post-delete retrieval failure"
+    }
+  ],
+  "equivalence_partitions": [
+    {
+      "id": "EP-1",
+      "requirement_ids": [
+        "R1",
+        "R8"
+      ],
+      "description": "Missing auth token on create",
+      "test_case_ids": [
+        "TC-001"
+      ]
+    },
+    {
+      "id": "EP-2",
+      "requirement_ids": [
+        "R2"
+      ],
+      "description": "Valid authenticated create payload",
+      "test_case_ids": [
+        "TC-002"
+      ]
+    },
+    {
+      "id": "EP-3",
+      "requirement_ids": [
+        "R3"
+      ],
+      "description": "Complete create response fields",
+      "test_case_ids": [
+        "TC-003"
+      ]
+    },
+    {
+      "id": "EP-4",
+      "requirement_ids": [
+        "R4"
+      ],
+      "description": "Repeated title accepted with distinct slug",
+      "test_case_ids": [
+        "TC-004"
+      ]
+    },
+    {
+      "id": "EP-5",
+      "requirement_ids": [
+        "R5"
+      ],
+      "description": "Empty title invalid partition",
+      "test_case_ids": [
+        "TC-005"
+      ]
+    },
+    {
+      "id": "EP-6",
+      "requirement_ids": [
+        "R6"
+      ],
+      "description": "Empty description invalid partition",
+      "test_case_ids": [
+        "TC-006"
+      ]
+    },
+    {
+      "id": "EP-7",
+      "requirement_ids": [
+        "R7"
+      ],
+      "description": "Empty body invalid partition",
+      "test_case_ids": [
+        "TC-007"
+      ]
+    },
+    {
+      "id": "EP-8",
+      "requirement_ids": [
+        "R9"
+      ],
+      "description": "Owner update with valid body",
+      "test_case_ids": [
+        "TC-008"
+      ]
+    },
+    {
+      "id": "EP-9",
+      "requirement_ids": [
+        "R10"
+      ],
+      "description": "Partial update leaves omitted fields unchanged",
+      "test_case_ids": [
+        "TC-009"
+      ]
+    },
+    {
+      "id": "EP-10",
+      "requirement_ids": [
+        "R15"
+      ],
+      "description": "Owner delete on existing slug",
+      "test_case_ids": [
+        "TC-014"
+      ]
+    }
+  ],
+  "boundary_values": [
+    {
+      "id": "BVA-1",
+      "requirement_ids": [
+        "R4"
+      ],
+      "description": "Same title reused across two creates",
+      "test_case_ids": [
+        "TC-004"
+      ]
+    },
+    {
+      "id": "BVA-2",
+      "requirement_ids": [
+        "R5"
+      ],
+      "description": "Title empty string vs non-empty valid value",
+      "test_case_ids": [
+        "TC-005",
+        "TC-002"
+      ]
+    },
+    {
+      "id": "BVA-3",
+      "requirement_ids": [
+        "R6"
+      ],
+      "description": "Description empty string vs non-empty valid value",
+      "test_case_ids": [
+        "TC-006",
+        "TC-002"
+      ]
+    },
+    {
+      "id": "BVA-4",
+      "requirement_ids": [
+        "R7"
+      ],
+      "description": "Body empty string vs non-empty valid value",
+      "test_case_ids": [
+        "TC-007",
+        "TC-002"
+      ]
+    },
+    {
+      "id": "BVA-5",
+      "requirement_ids": [
+        "R12"
+      ],
+      "description": "tagList empty array boundary",
+      "test_case_ids": [
+        "TC-011"
+      ]
+    },
+    {
+      "id": "BVA-6",
+      "requirement_ids": [
+        "R13"
+      ],
+      "description": "tagList null boundary",
+      "test_case_ids": [
+        "TC-012"
+      ]
+    }
+  ],
+  "decision_tables": [
+    {
+      "id": "DT-1",
+      "requirement_ids": [
+        "R11",
+        "R12",
+        "R13"
+      ],
+      "conditions": [
+        "tagList omitted",
+        "tagList = []",
+        "tagList = null",
+        "tagList = non-empty array"
+      ],
+      "rules": [
+        {
+          "rule": "omit",
+          "expected": "preserve existing tags",
+          "test_case_id": "TC-010"
+        },
+        {
+          "rule": "empty-array",
+          "expected": "clear all tags",
+          "test_case_id": "TC-011"
+        },
+        {
+          "rule": "null",
+          "expected": "reject request",
+          "test_case_id": "TC-012"
+        },
+        {
+          "rule": "replace",
+          "expected": "replace tags with supplied values",
+          "test_case_id": "TC-013"
+        }
+      ]
+    }
+  ],
+  "test_scenarios": [
+    {
+      "id": "SC-01",
+      "requirement_ids": [
+        "R1",
+        "R8"
+      ],
+      "type": "Negative",
+      "priority": "High",
+      "title": "Unauthenticated create rejected"
+    },
+    {
+      "id": "SC-02",
+      "requirement_ids": [
+        "R2"
+      ],
+      "type": "Happy Path",
+      "priority": "High",
+      "title": "Valid create succeeds"
+    },
+    {
+      "id": "SC-03",
+      "requirement_ids": [
+        "R3"
+      ],
+      "type": "Happy Path",
+      "priority": "High",
+      "title": "Create response completeness"
+    },
+    {
+      "id": "SC-04",
+      "requirement_ids": [
+        "R4"
+      ],
+      "type": "Boundary",
+      "priority": "Medium",
+      "title": "Duplicate title unique slug"
+    },
+    {
+      "id": "SC-05",
+      "requirement_ids": [
+        "R5"
+      ],
+      "type": "Negative",
+      "priority": "High",
+      "title": "Empty title rejected"
+    },
+    {
+      "id": "SC-06",
+      "requirement_ids": [
+        "R6"
+      ],
+      "type": "Negative",
+      "priority": "High",
+      "title": "Empty description rejected"
+    },
+    {
+      "id": "SC-07",
+      "requirement_ids": [
+        "R7"
+      ],
+      "type": "Negative",
+      "priority": "High",
+      "title": "Empty body rejected"
+    },
+    {
+      "id": "SC-08",
+      "requirement_ids": [
+        "R9",
+        "R10"
+      ],
+      "type": "Happy Path",
+      "priority": "High",
+      "title": "Owner partial update"
+    },
+    {
+      "id": "SC-09",
+      "requirement_ids": [
+        "R11",
+        "R12",
+        "R13"
+      ],
+      "type": "State",
+      "priority": "High",
+      "title": "tagList decision combinations"
+    },
+    {
+      "id": "SC-10",
+      "requirement_ids": [
+        "R14"
+      ],
+      "type": "State",
+      "priority": "Medium",
+      "title": "Update persistence"
+    },
+    {
+      "id": "SC-11",
+      "requirement_ids": [
+        "R15"
+      ],
+      "type": "Happy Path",
+      "priority": "High",
+      "title": "Owner delete success"
+    },
+    {
+      "id": "SC-12",
+      "requirement_ids": [
+        "R16"
+      ],
+      "type": "State",
+      "priority": "Medium",
+      "title": "Post-delete retrieval fails"
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "Reject unauthenticated create",
+      "requirement_ids": [
+        "R1",
+        "R8"
+      ],
+      "priority": "High",
+      "steps": [
+        "POST /articles without Authorization header"
+      ],
+      "expected_result": "Request is rejected as unauthorized"
+    },
+    {
+      "id": "TC-002",
+      "title": "Create article with valid payload",
+      "requirement_ids": [
+        "R2"
+      ],
+      "priority": "High",
+      "steps": [
+        "POST /articles with valid token and non-empty title/description/body"
+      ],
+      "expected_result": "HTTP 201 and created article object returned"
+    },
+    {
+      "id": "TC-003",
+      "title": "Verify create response fields",
+      "requirement_ids": [
+        "R3"
+      ],
+      "priority": "High",
+      "steps": [
+        "Inspect successful create response payload"
+      ],
+      "expected_result": "Response includes title, slug, description, body, tagList, createdAt, updatedAt, favorited, favoritesCount, author.username"
+    },
+    {
+      "id": "TC-004",
+      "title": "Duplicate title unique slug",
+      "requirement_ids": [
+        "R4"
+      ],
+      "priority": "Medium",
+      "steps": [
+        "Create two articles with identical title"
+      ],
+      "expected_result": "Both creates succeed and returned slugs differ"
+    },
+    {
+      "id": "TC-005",
+      "title": "Empty title rejected",
+      "requirement_ids": [
+        "R5"
+      ],
+      "priority": "High",
+      "steps": [
+        "POST /articles with empty title"
+      ],
+      "expected_result": "Validation error returned"
+    },
+    {
+      "id": "TC-006",
+      "title": "Empty description rejected",
+      "requirement_ids": [
+        "R6"
+      ],
+      "priority": "High",
+      "steps": [
+        "POST /articles with empty description"
+      ],
+      "expected_result": "Validation error returned"
+    },
+    {
+      "id": "TC-007",
+      "title": "Empty body rejected",
+      "requirement_ids": [
+        "R7"
+      ],
+      "priority": "High",
+      "steps": [
+        "POST /articles with empty body"
+      ],
+      "expected_result": "Validation error returned"
+    },
+    {
+      "id": "TC-008",
+      "title": "Owner updates body",
+      "requirement_ids": [
+        "R9"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT /articles/{slug} with owner token and new body"
+      ],
+      "expected_result": "Update succeeds and body reflects new value"
+    },
+    {
+      "id": "TC-009",
+      "title": "Partial update preserves fields",
+      "requirement_ids": [
+        "R10"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT only body, then GET same slug"
+      ],
+      "expected_result": "Unmodified fields remain unchanged"
+    },
+    {
+      "id": "TC-010",
+      "title": "Omitted tagList preserves tags",
+      "requirement_ids": [
+        "R11"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT update payload without tagList field"
+      ],
+      "expected_result": "Existing tags remain unchanged"
+    },
+    {
+      "id": "TC-011",
+      "title": "Empty tagList clears tags",
+      "requirement_ids": [
+        "R12"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT update payload with tagList=[]"
+      ],
+      "expected_result": "Article tagList becomes empty"
+    },
+    {
+      "id": "TC-012",
+      "title": "Null tagList rejected",
+      "requirement_ids": [
+        "R13"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT update payload with tagList=null"
+      ],
+      "expected_result": "Validation error returned"
+    },
+    {
+      "id": "TC-013",
+      "title": "Non-empty tagList replaces tags",
+      "requirement_ids": [
+        "R11",
+        "R12"
+      ],
+      "priority": "High",
+      "steps": [
+        "PUT update payload with tagList=['newTag']"
+      ],
+      "expected_result": "Article tagList replaced by supplied values"
+    },
+    {
+      "id": "TC-014",
+      "title": "Owner delete succeeds",
+      "requirement_ids": [
+        "R15"
+      ],
+      "priority": "High",
+      "steps": [
+        "DELETE /articles/{slug} with owner token"
+      ],
+      "expected_result": "Delete succeeds with success status"
+    },
+    {
+      "id": "TC-015",
+      "title": "Updated article remains updated",
+      "requirement_ids": [
+        "R14"
+      ],
+      "priority": "Medium",
+      "steps": [
+        "GET /articles/{slug} after successful update"
+      ],
+      "expected_result": "GET response reflects updated state"
+    },
+    {
+      "id": "TC-016",
+      "title": "Deleted article cannot be fetched",
+      "requirement_ids": [
+        "R16"
+      ],
+      "priority": "Medium",
+      "steps": [
+        "GET /articles/{slug} after successful delete"
+      ],
+      "expected_result": "Retrieval fails or indicates article no longer exists"
+    }
+  ],
+  "traceability": [
+    {
+      "requirement_id": "R1",
+      "coverage_item_id": "CI-1",
+      "technique": "EP",
+      "analysis_id": "EP-1",
+      "test_case_ids": [
+        "TC-001"
+      ]
+    },
+    {
+      "requirement_id": "R2",
+      "coverage_item_id": "CI-2",
+      "technique": "EP",
+      "analysis_id": "EP-2",
+      "test_case_ids": [
+        "TC-002"
+      ]
+    },
+    {
+      "requirement_id": "R3",
+      "coverage_item_id": "CI-2",
+      "technique": "EP",
+      "analysis_id": "EP-3",
+      "test_case_ids": [
+        "TC-003"
+      ]
+    },
+    {
+      "requirement_id": "R4",
+      "coverage_item_id": "CI-3",
+      "technique": "EP",
+      "analysis_id": "EP-4",
+      "test_case_ids": [
+        "TC-004"
+      ]
+    },
+    {
+      "requirement_id": "R5",
+      "coverage_item_id": "CI-4",
+      "technique": "EP",
+      "analysis_id": "EP-5",
+      "test_case_ids": [
+        "TC-005"
+      ]
+    },
+    {
+      "requirement_id": "R6",
+      "coverage_item_id": "CI-5",
+      "technique": "EP",
+      "analysis_id": "EP-6",
+      "test_case_ids": [
+        "TC-006"
+      ]
+    },
+    {
+      "requirement_id": "R7",
+      "coverage_item_id": "CI-6",
+      "technique": "EP",
+      "analysis_id": "EP-7",
+      "test_case_ids": [
+        "TC-007"
+      ]
+    },
+    {
+      "requirement_id": "R8",
+      "coverage_item_id": "CI-1",
+      "technique": "EP",
+      "analysis_id": "EP-1",
+      "test_case_ids": [
+        "TC-001"
+      ]
+    },
+    {
+      "requirement_id": "R9",
+      "coverage_item_id": "CI-7",
+      "technique": "EP",
+      "analysis_id": "EP-8",
+      "test_case_ids": [
+        "TC-008"
+      ]
+    },
+    {
+      "requirement_id": "R10",
+      "coverage_item_id": "CI-7",
+      "technique": "EP",
+      "analysis_id": "EP-9",
+      "test_case_ids": [
+        "TC-009"
+      ]
+    },
+    {
+      "requirement_id": "R11",
+      "coverage_item_id": "CI-8",
+      "technique": "DT",
+      "analysis_id": "DT-1",
+      "test_case_ids": [
+        "TC-010",
+        "TC-013"
+      ]
+    },
+    {
+      "requirement_id": "R12",
+      "coverage_item_id": "CI-8",
+      "technique": "DT",
+      "analysis_id": "DT-1",
+      "test_case_ids": [
+        "TC-011"
+      ]
+    },
+    {
+      "requirement_id": "R13",
+      "coverage_item_id": "CI-8",
+      "technique": "DT",
+      "analysis_id": "DT-1",
+      "test_case_ids": [
+        "TC-012"
+      ]
+    },
+    {
+      "requirement_id": "R14",
+      "coverage_item_id": "CI-9",
+      "technique": "Scenario",
+      "analysis_id": "SC-10",
+      "test_case_ids": [
+        "TC-015"
+      ]
+    },
+    {
+      "requirement_id": "R15",
+      "coverage_item_id": "CI-10",
+      "technique": "EP",
+      "analysis_id": "EP-10",
+      "test_case_ids": [
+        "TC-014"
+      ]
+    },
+    {
+      "requirement_id": "R16",
+      "coverage_item_id": "CI-11",
+      "technique": "Scenario",
+      "analysis_id": "SC-12",
+      "test_case_ids": [
+        "TC-016"
+      ]
+    }
+  ],
+  "coverage_metrics": {
+    "requirement_coverage": 1.0,
+    "ep_coverage": 1.0,
+    "bva_coverage": 1.0,
+    "dt_coverage": 1.0,
+    "duplicate_case_rate": 0.0
+  },
+  "revision_log": []
+}

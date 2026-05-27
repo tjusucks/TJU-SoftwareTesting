@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assignment02/black-box-input.schema.json",
+  "title": "BlackBoxInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "feature_id",
+    "input_mode",
+    "feature_spec_path",
+    "structured_requirements_path",
+    "risk_analysis_path",
+    "review_context"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.0$"
+    },
+    "feature_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "input_mode": {
+      "type": "string",
+      "enum": [
+        "standalone",
+        "integrated",
+        "orchestrated"
+      ]
+    },
+    "feature_spec_path": {
+      "type": "string"
+    },
+    "structured_requirements_path": {
+      "type": "string"
+    },
+    "risk_analysis_path": {
+      "type": "string"
+    },
+    "review_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "designer_revisions_path"
+      ],
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "designer_revisions_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
