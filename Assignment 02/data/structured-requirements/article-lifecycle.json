@@ -1,0 +1,345 @@
+{
+  "schema_version": "1.0",
+  "project_name": "RealWorld/Conduit",
+  "feature_id": "article-lifecycle",
+  "feature_name": "Article Creation, Editing, and Deletion",
+  "source_path": "README.md:31; docs/src/content/docs/implementation-creation/features.md:9; docs/src/content/docs/implementation-creation/introduction.md:5; https://realworld-docs.netlify.app/specifications/backend/endpoints/",
+  "actors": [
+    "authenticated article author",
+    "authenticated non-author",
+    "unauthenticated user"
+  ],
+  "preconditions": [
+    "API service is reachable",
+    "At least one registered user exists",
+    "Token issuance is available for authenticated write operations"
+  ],
+  "business_rules": [
+    "Article creation, reading, updating, and deletion are in application scope",
+    "Article write operations use the custom API",
+    "Article write operations require authentication",
+    "Only the owning author should be able to edit or delete an article",
+    "Successful article updates should be durable and observable through later reads",
+    "Successful article deletion should remove the article from active detail and list availability"
+  ],
+  "input_constraints": [
+    "Create payload includes article.title, article.description, and article.body",
+    "Create payload may include article.tagList",
+    "Update target is identified by article slug",
+    "Update payload may include changed article fields",
+    "Post-update verification uses the current article slug for subsequent reads",
+    "Post-delete verification uses the deleted article slug and relevant article list filters",
+    "Exact maximum lengths, whitespace handling, and tag validation are not defined by the local fixture"
+  ],
+  "error_conditions": [
+    "Unauthenticated article creation is rejected",
+    "Unauthenticated article update or deletion is rejected",
+    "Non-owner article update or deletion is rejected or otherwise forbidden",
+    "Invalid create or update payload is rejected",
+    "A successful update that is not reflected by a later read violates lifecycle persistence",
+    "Deleted article retrieval should not return an active article",
+    "A deleted article remaining visible in article lists violates deletion observability"
+  ],
+  "requirement_items": [
+    {
+      "id": "R1",
+      "description": "Creating an article requires authentication.",
+      "input_fields": [
+        "authorization",
+        "article.title",
+        "article.description",
+        "article.body"
+      ],
+      "data_ranges": [
+        "missing token",
+        "valid token"
+      ],
+      "conditions": [
+        "POST /api/articles",
+        "request attempts to create an article"
+      ],
+      "expected_actions": [
+        "Reject unauthenticated create attempts",
+        "Allow create processing only for authenticated users"
+      ],
+      "notes": "Evidence: README.md:31 and features.md:9 confirm CRUD articles; features.md:7 confirms JWT authentication. Official endpoint docs mark article creation as authenticated."
+    },
+    {
+      "id": "R2",
+      "description": "An authenticated author can create an article with valid article data.",
+      "input_fields": [
+        "authorization",
+        "article.title",
+        "article.description",
+        "article.body",
+        "article.tagList"
+      ],
+      "data_ranges": [
+        "valid JWT token",
+        "non-empty title",
+        "non-empty description",
+        "non-empty body",
+        "tagList omitted or array"
+      ],
+      "conditions": [
+        "POST /api/articles",
+        "authenticated user",
+        "valid JSON payload"
+      ],
+      "expected_actions": [
+        "Persist the article",
+        "Associate the article with the authenticated author",
+        "Return the created article representation"
+      ],
+      "notes": "Evidence: local docs confirm article creation and official endpoint docs define POST /api/articles. Exact success status is official-spec dependent and should be verified in the target implementation."
+    },
+    {
+      "id": "R3",
+      "description": "Created article responses include the article identity, content, metadata, and author information needed for later reads.",
+      "input_fields": [
+        "response.article.slug",
+        "response.article.title",
+        "response.article.description",
+        "response.article.body",
+        "response.article.tagList",
+        "response.article.author"
+      ],
+      "data_ranges": [
+        "expected response fields present"
+      ],
+      "conditions": [
+        "successful article creation"
+      ],
+      "expected_actions": [
+        "Return a slug that identifies the article",
+        "Return the saved article content",
+        "Return author metadata"
+      ],
+      "notes": "Official response format defines article object fields. Local fixture only confirms article publishing and CRUD scope, not exact response fields."
+    },
+    {
+      "id": "R4",
+      "description": "Creating an article with missing or invalid required article fields is rejected.",
+      "input_fields": [
+        "article.title",
+        "article.description",
+        "article.body"
+      ],
+      "data_ranges": [
+        "field omitted",
+        "empty string",
+        "invalid value"
+      ],
+      "conditions": [
+        "POST /api/articles",
+        "authenticated user",
+        "payload fails implementation validation"
+      ],
+      "expected_actions": [
+        "Do not persist the article",
+        "Return a validation error response"
+      ],
+      "notes": "Required field validation is inferred from the official create payload and is not specified by the local fixture. Whitespace-only handling is an open implementation question."
+    },
+    {
+      "id": "R5",
+      "description": "The owning author can edit an existing article.",
+      "input_fields": [
+        "authorization",
+        "slug",
+        "article.title",
+        "article.description",
+        "article.body",
+        "article.tagList"
+      ],
+      "data_ranges": [
+        "owner token",
+        "existing slug",
+        "valid update payload"
+      ],
+      "conditions": [
+        "PUT /api/articles/{slug}",
+        "authenticated user is the article author"
+      ],
+      "expected_actions": [
+        "Apply supplied changes to the existing article",
+        "Return the updated article representation",
+        "Keep the article associated with the original author"
+      ],
+      "notes": "Evidence: README.md:31 and features.md:9 confirm article updating. Official endpoint docs define PUT /api/articles/{slug}; owner-only behavior should be verified against the implementation."
+    },
+    {
+      "id": "R6",
+      "description": "Article updates preserve unchanged article fields unless the request supplies a replacement value.",
+      "input_fields": [
+        "slug",
+        "article.title",
+        "article.description",
+        "article.body",
+        "article.tagList"
+      ],
+      "data_ranges": [
+        "partial update payload",
+        "omitted optional field"
+      ],
+      "conditions": [
+        "PUT /api/articles/{slug}",
+        "successful owner update"
+      ],
+      "expected_actions": [
+        "Change only fields included in the update payload",
+        "Preserve omitted fields"
+      ],
+      "notes": "Official API describes updating article fields, but the local fixture does not specify partial-update semantics. Treat this as a review point if the target backend differs."
+    },
+    {
+      "id": "R7",
+      "description": "Article edit attempts by unauthenticated users or non-owners are rejected.",
+      "input_fields": [
+        "authorization",
+        "slug",
+        "article update payload"
+      ],
+      "data_ranges": [
+        "missing token",
+        "invalid token",
+        "valid token for non-author"
+      ],
+      "conditions": [
+        "PUT /api/articles/{slug}",
+        "requester is not the owning author"
+      ],
+      "expected_actions": [
+        "Do not modify the article",
+        "Return an unauthorized or forbidden error response"
+      ],
+      "notes": "Authentication is confirmed by official article endpoint docs. Non-owner rejection is an expected ownership rule for edit/delete operations and should be reviewed because local high-level docs do not state it explicitly."
+    },
+    {
+      "id": "R8",
+      "description": "The owning author can delete an existing article.",
+      "input_fields": [
+        "authorization",
+        "slug"
+      ],
+      "data_ranges": [
+        "owner token",
+        "existing slug"
+      ],
+      "conditions": [
+        "DELETE /api/articles/{slug}",
+        "authenticated user is the article author"
+      ],
+      "expected_actions": [
+        "Remove the article from active availability",
+        "Return a successful deletion response"
+      ],
+      "notes": "Evidence: README.md:31 and features.md:9 confirm article deletion. Official endpoint docs define DELETE /api/articles/{slug}."
+    },
+    {
+      "id": "R9",
+      "description": "After an article is deleted, later retrieval of that article does not return it as an active article.",
+      "input_fields": [
+        "slug"
+      ],
+      "data_ranges": [
+        "slug for a deleted article"
+      ],
+      "conditions": [
+        "DELETE /api/articles/{slug} succeeds",
+        "GET /api/articles/{slug} is requested afterward"
+      ],
+      "expected_actions": [
+        "Do not return the deleted article as an active article",
+        "Return a not-found or equivalent unavailable response"
+      ],
+      "notes": "Deletion is confirmed in local scope. Exact post-delete status and body are not defined by the local fixture."
+    },
+    {
+      "id": "R10",
+      "description": "Article delete attempts by unauthenticated users or non-owners are rejected.",
+      "input_fields": [
+        "authorization",
+        "slug"
+      ],
+      "data_ranges": [
+        "missing token",
+        "invalid token",
+        "valid token for non-author"
+      ],
+      "conditions": [
+        "DELETE /api/articles/{slug}",
+        "requester is not the owning author"
+      ],
+      "expected_actions": [
+        "Do not delete the article",
+        "Return an unauthorized or forbidden error response"
+      ],
+      "notes": "Authentication is confirmed by official endpoint docs. Non-owner deletion rejection is an expected ownership rule and should be confirmed against the target implementation."
+    },
+    {
+      "id": "R11",
+      "description": "After an article is successfully updated, later reads of that article return the persisted updated values.",
+      "input_fields": [
+        "authorization",
+        "slug",
+        "article.title",
+        "article.description",
+        "article.body",
+        "article.tagList",
+        "response.article.slug",
+        "response.article.updatedAt"
+      ],
+      "data_ranges": [
+        "owner token",
+        "existing slug",
+        "valid update payload changing at least one persisted field",
+        "subsequent GET by current article slug"
+      ],
+      "conditions": [
+        "PUT /api/articles/{slug} succeeds",
+        "GET /api/articles/{currentSlug} is requested afterward"
+      ],
+      "expected_actions": [
+        "Persist the supplied article changes beyond the update response",
+        "Return the updated article values on a subsequent detail read",
+        "Preserve unchanged fields according to the update semantics",
+        "Expose an updated timestamp or equivalent updated metadata when supported"
+      ],
+      "notes": "Evidence: README.md:31 and features.md:9 confirm article updating and reading. This requirement makes update persistence explicit for AutoTestDesign. If title changes cause slug regeneration, the target implementation should confirm whether subsequent reads use the old slug or the returned current slug."
+    },
+    {
+      "id": "R12",
+      "description": "After an article is successfully deleted, the deleted article is no longer observable as an active article through detail or article list reads.",
+      "input_fields": [
+        "authorization",
+        "slug",
+        "limit",
+        "offset",
+        "author",
+        "tag",
+        "favorited"
+      ],
+      "data_ranges": [
+        "owner token",
+        "slug for a deleted article",
+        "global list",
+        "author-filtered list",
+        "tag-filtered list when the deleted article had tags",
+        "favorited-filtered list when the deleted article had favorites"
+      ],
+      "conditions": [
+        "DELETE /api/articles/{slug} succeeds",
+        "GET /api/articles/{slug} is requested afterward",
+        "GET /api/articles is requested afterward with filters that would have included the article before deletion"
+      ],
+      "expected_actions": [
+        "Do not return the deleted article from detail lookup",
+        "Do not include the deleted article in global article lists",
+        "Do not include the deleted article in filtered article lists",
+        "Keep unrelated active articles visible"
+      ],
+      "notes": "Evidence: README.md:31 confirms article deletion and reading; README.md:32 and features.md:11 confirm paginated article lists. Exact not-found status, response body, and list ordering are not defined by the local fixture and should be reviewed against the target backend."
+    }
+  ]
+}
