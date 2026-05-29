@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: End-to-end test design pipeline. Guides the designer through requirement structuring, risk analysis, black-box design, and white-box modeling with interactive review at each stage. Use as the main entry point for running the full AutoTestDesign workflow on a target feature.
+description: End-to-end test design pipeline with interactive review at each stage. Use when the designer wants to run the full test design workflow on a target feature, asks to analyze a feature for testing, requests requirement-to-test-case generation, or needs to orchestrate multiple test design stages together.
 user-invocable: true
 ---
 
