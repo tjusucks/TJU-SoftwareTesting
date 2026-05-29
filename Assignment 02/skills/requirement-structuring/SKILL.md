@@ -1,6 +1,7 @@
 ---
 name: requirement-structuring
 description: Use when extracting, analyzing, and structuring requirements from local project files, existing requirement documents, CSV-like inputs, README/API docs, issue text, or agent CLI/user input into a schema-compatible structured requirement specification. Produces requirement input inventory, R1/R2-style requirement IDs, structured requirement items, constraints, conditions, expected actions, acceptance criteria, open questions, and source evidence for downstream risk analysis and black-box test design.
+user-invocable: true
 ---
 
 # Requirement Structuring

@@ -2,7 +2,6 @@
 name: black-box-design
 description: Assignment 02 black-box design skill for generating coverage items, EP/BVA/Decision Table analyses, test cases, traceability, and JSON/CSV export artifacts with revision support.
 license: Apache-2.0
-disable-model-invocation: true
 user-invocable: true
 ---
 
