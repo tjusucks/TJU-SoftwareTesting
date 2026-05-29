@@ -64,17 +64,17 @@ For Markdown, text, or Word/PDF-derived text:
 
 Map common columns to the output contract:
 
-| Input column | Output field |
-| --- | --- |
-| ID / Req ID | `id`; normalize to `R1`, `R2`, `R3` style |
-| Feature / Module / Component | `feature_id`, `feature_name`, or `notes` |
-| Requirement / Description | `description` |
-| Actor / Role | top-level `actors` or requirement `notes` |
-| Condition / Precondition | `conditions` |
-| Constraint / Rule | top-level `input_constraints`, `business_rules`, or requirement `notes` |
-| Expected Result | `expected_actions` |
-| Priority | `notes` |
-| Source | `source_path`, input inventory, or requirement `notes` |
+| Input column                 | Output field                                                            |
+| ---------------------------- | ----------------------------------------------------------------------- |
+| ID / Req ID                  | `id`; normalize to `R1`, `R2`, `R3` style                               |
+| Feature / Module / Component | `feature_id`, `feature_name`, or `notes`                                |
+| Requirement / Description    | `description`                                                           |
+| Actor / Role                 | top-level `actors` or requirement `notes`                               |
+| Condition / Precondition     | `conditions`                                                            |
+| Constraint / Rule            | top-level `input_constraints`, `business_rules`, or requirement `notes` |
+| Expected Result              | `expected_actions`                                                      |
+| Priority                     | `notes`                                                                 |
+| Source                       | `source_path`, input inventory, or requirement `notes`                  |
 
 If columns are missing, keep values as `Unspecified` and add an open question instead
 of inventing details.

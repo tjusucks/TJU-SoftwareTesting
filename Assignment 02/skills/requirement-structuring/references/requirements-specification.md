@@ -160,9 +160,9 @@ Avoid:
 
 For human review, include a compact table:
 
-| ID | Title | Type | Source | Requirement | Conditions | Constraints | Expected Behavior | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| R1 | User can log in | functional | SRC-DOC-001 | Registered user can log in. | Account exists | None | Session is created. | candidate |
+| ID  | Title           | Type       | Source      | Requirement                 | Conditions     | Constraints | Expected Behavior   | Status    |
+| --- | --------------- | ---------- | ----------- | --------------------------- | -------------- | ----------- | ------------------- | --------- |
+| R1  | User can log in | functional | SRC-DOC-001 | Registered user can log in. | Account exists | None        | Session is created. | candidate |
 
 After the table, list:
 
@@ -216,6 +216,7 @@ Specification is ready for handoff when:
 - Last assigned requirement ID: R18
 
 Main open questions:
+
 - Should social login be in scope?
 - What exact response-time target applies to feed loading?
 - Are anonymous users allowed to view article comments?
