@@ -114,6 +114,24 @@ Follow this workflow for requirement structuring tasks:
 
 ---
 
+## Input Modes
+
+The skill supports two modes:
+
+1. `standalone` (default)
+   - User invokes directly via `/test-design:requirement-structuring`.
+   - User provides source paths or text as input.
+   - Output written to `outputs/structured-requirements/{feature_id}/`.
+
+2. `orchestrated`
+   - Invoked by the orchestrator skill with a standardized payload.
+   - Orchestrator provides `feature_id`, `feature_spec_path`, and source list.
+   - Same output contract; orchestrator reads the output path.
+
+If `input_mode` is not specified, default to `standalone`.
+
+---
+
 ## Required Output Contract
 
 Produce both a human-readable summary and a machine-readable structure when possible.
@@ -121,7 +139,16 @@ For downstream `black-box-design` handoff, the machine-readable output must matc
 the structured requirements schema used by this toolchain
 (`schemas/structured-requirements.schema.json`).
 
-Minimum fields per requirement:
+### Output Directory
+
+```
+outputs/structured-requirements/{feature_id}/
+├── structured-requirements.json   # machine-readable, schema-compliant
+├── report.md                      # human-readable summary
+└── revision_log.json              # present only if revisions were applied
+```
+
+### Minimum Fields per Requirement
 
 ```json
 {
@@ -184,6 +211,33 @@ Use this reference to:
 - Assign stable `R1`, `R2`, `R3` requirement IDs.
 - Generate acceptance criteria candidates.
 - Run the requirement structuring quality checklist.
+
+---
+
+## Review / Revision Behavior
+
+The designer may review the structured requirements and request changes.
+Revision input reuses the shared revision schema:
+
+- `Assignment 02/schemas/designer-revisions.schema.json`
+
+Supported actions:
+
+- `add` — add a new requirement item
+- `modify` — change description, conditions, expected_actions, or notes
+- `remove` — remove a requirement item
+
+Supported target types:
+
+- `requirement`
+
+If revision input is present, you must:
+
+- Apply each revision deterministically to the current requirement set.
+- Record before/after summary in `revision_log.json`.
+- Preserve ID stability: removed IDs are not reused; new items get the next
+  sequential ID.
+- Re-run the Validate step after applying revisions.
 
 ---
 
