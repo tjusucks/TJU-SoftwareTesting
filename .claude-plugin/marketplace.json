@@ -18,7 +18,7 @@
     {
       "name": "test-design",
       "description": "AI-driven AutoTestDesign tool. Includes requirement structuring, risk analysis, black-box design, white-box modeling, and other testing skills.",
-      "source": "./Assignment 02/skills",
+      "source": "./Assignment 02",
       "version": "1.0.0"
     }
   ]
