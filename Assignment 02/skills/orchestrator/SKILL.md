@@ -120,34 +120,11 @@ When a dedicated `white-box-modeling` skill becomes available, this fallback is 
 
 Collect all stage outputs and produce a pipeline summary.
 
-1. **Pipeline summary** (`outputs/pipeline/{feature_id}/pipeline-summary.md`):
-   - Feature scope (from Stage 1).
-   - Risk overview (from Stage 2).
-   - Black-box design metrics: requirement count, coverage item count, test case count, technique breakdown.
-   - White-box modeling summary: states, transitions, coverage criterion, test sequences.
-   - Cross-stage traceability: requirement → risk → coverage item → test case.
-   - Revision history across all stages.
+1. **Pipeline summary** — follow the template in `templates/pipeline-summary.md`.
+   Write to `outputs/pipeline/{feature_id}/pipeline-summary.md`.
 
-2. **Pipeline status** (`outputs/pipeline/{feature_id}/pipeline-status.md`):
-
-   ```markdown
-   # Pipeline Status: {feature_id}
-
-   ## Stages
-
-   | Stage                   | Status         | Source           | Output                                        |
-   | ----------------------- | -------------- | ---------------- | --------------------------------------------- |
-   | Requirement Structuring | done           | skill            | outputs/structured-requirements/{feature_id}/ |
-   | Risk Analysis           | done           | fallback / skill | outputs/risk-analysis/{feature_id}/           |
-   | Black-Box Design        | done           | skill            | outputs/black-box-design/runs/{run_id}/       |
-   | White-Box Modeling      | done / skipped | skill / fallback | outputs/white-box-modeling/{feature_id}/      |
-
-   ## Metrics
-
-   - Total requirements: ...
-   - Total test cases: ...
-   - Revisions applied: ...
-   ```
+2. **Pipeline status** — follow the template in `templates/pipeline-status.md`.
+   Write to `outputs/pipeline/{feature_id}/pipeline-status.md`.
 
 3. Present the final summary to the designer.
 
