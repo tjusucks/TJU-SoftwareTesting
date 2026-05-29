@@ -11,7 +11,7 @@ mode), and other members can adapt their outputs to this contract later.
 - Member4 owns the black-box contract and maintains this file.
 - Member2/member3 outputs must follow the schema files in `Assignment 02/schemas/`.
 - Member1 orchestrator should call this contract as-is.
-- If upstream outputs are missing, member4 uses `data/reference/*` without blocking.
+- If upstream outputs are missing, member4 uses `inputs/reference/*` without blocking.
 
 ## 2. Directory Layout
 
@@ -27,13 +27,14 @@ Assignment 02/
 ├── skills/black-box-design/
 │   ├── SKILL.md
 │   └── template.md
-├── data/
+├── inputs/
 │   ├── reference/
 │   │   ├── structured-requirements/
 │   │   └── risk-analysis/
+│   └── review/
+├── outputs/
 │   ├── structured-requirements/
 │   ├── risk-analysis/
-│   ├── review/
 │   └── black-box-design/
 └── docs/member4/
 ```
@@ -57,7 +58,7 @@ The skill supports three modes:
 1. `standalone` (default)
    - Uses feature spec + member4 reference structured requirements + reference risk.
 2. `integrated`
-   - Uses member2/member3 formal outputs in `data/structured-requirements` and `data/risk-analysis`.
+   - Uses member2/member3 formal outputs in `outputs/structured-requirements` and `outputs/risk-analysis`.
 3. `orchestrated`
    - Same payload shape, invoked by member1 orchestrator.
 
@@ -73,7 +74,7 @@ When risk input is missing, use:
 
 ## 6. Review and Revision Contract
 
-Designer revisions are provided in `data/review/*.json` using the schema
+Designer revisions are provided in `inputs/review/*.json` using the schema
 `designer-revisions.schema.json`.
 
 Supported actions:
@@ -110,7 +111,7 @@ For `article-lifecycle`, member4 must produce:
 
 Final handoff directory:
 
-`Assignment 02/data/black-box-design/final/article-lifecycle/`
+`Assignment 02/outputs/black-box-design/final/article-lifecycle/`
 
 Minimum files:
 

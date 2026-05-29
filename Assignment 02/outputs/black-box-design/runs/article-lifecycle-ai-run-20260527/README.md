@@ -14,6 +14,6 @@ This directory contains an **AI-driven** execution of the `black-box-design` ski
 
 Final exports were synced into:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/`
 
 See `final/RUN_LOG.json` for machine-readable execution metadata.
