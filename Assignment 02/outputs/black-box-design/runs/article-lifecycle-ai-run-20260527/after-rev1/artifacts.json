@@ -867,7 +867,7 @@
   "revision_log": [
     {
       "revision": 1,
-      "source": "Assignment 02/data/review/article-lifecycle-rev1.json",
+      "source": "Assignment 02/inputs/review/article-lifecycle-rev1.json",
       "designer_action": "interactive_review",
       "summary": "Added CI-12, TC-017, TC-018 for unauthorized update/delete negatives.",
       "impact": {

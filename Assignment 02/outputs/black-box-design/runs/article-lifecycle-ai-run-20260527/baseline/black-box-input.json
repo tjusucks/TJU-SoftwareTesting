@@ -3,8 +3,8 @@
   "feature_id": "article-lifecycle",
   "input_mode": "standalone",
   "feature_spec_path": "Assignment 01/codebases/realworld/specification/features/article-lifecycle.md",
-  "structured_requirements_path": "Assignment 02/data/reference/structured-requirements/article-lifecycle.json",
-  "risk_analysis_path": "Assignment 02/data/reference/risk-analysis/article-lifecycle.json",
+  "structured_requirements_path": "Assignment 02/inputs/reference/structured-requirements/article-lifecycle.json",
+  "risk_analysis_path": "Assignment 02/inputs/reference/risk-analysis/article-lifecycle.json",
   "review_context": {
     "revision": 0,
     "designer_revisions_path": null

@@ -125,14 +125,14 @@
   "revision_log": [
     {
       "revision": 1,
-      "source": "Assignment 02/data/review/article-lifecycle-rev1.json",
+      "source": "Assignment 02/inputs/review/article-lifecycle-rev1.json",
       "designer_action": "interactive_review",
       "summary": "Added CI-12, TC-017, TC-018 for unauthorized update/delete negatives.",
       "impact": {"coverage_items_added": 1, "test_cases_added": 2}
     },
     {
       "revision": 2,
-      "source": "Assignment 02/data/review/article-lifecycle-rev2.json",
+      "source": "Assignment 02/inputs/review/article-lifecycle-rev2.json",
       "designer_action": "interactive_review",
       "summary": "Refined TC-016 expected result for verifiable post-delete not-found semantics.",
       "impact": {"test_cases_modified": 1}

@@ -1,7 +1,7 @@
 [
   {
     "revision": 1,
-    "source": "Assignment 02/data/review/article-lifecycle-rev1.json",
+    "source": "Assignment 02/inputs/review/article-lifecycle-rev1.json",
     "designer_action": "interactive_review",
     "applied_at": "2026-05-27T16:09:51+08:00",
     "changes": [
@@ -27,7 +27,7 @@
   },
   {
     "revision": 2,
-    "source": "Assignment 02/data/review/article-lifecycle-rev2.json",
+    "source": "Assignment 02/inputs/review/article-lifecycle-rev2.json",
     "designer_action": "interactive_review",
     "applied_at": "2026-05-27T16:09:51+08:00",
     "changes": [

@@ -44,5 +44,5 @@ Required fields:
 If member2/member3 files are missing, orchestrator may switch to `standalone`
 and reuse member4 reference inputs:
 
-- `Assignment 02/data/reference/structured-requirements/article-lifecycle.json`
-- `Assignment 02/data/reference/risk-analysis/article-lifecycle.json`
+- `Assignment 02/inputs/reference/structured-requirements/article-lifecycle.json`
+- `Assignment 02/inputs/reference/risk-analysis/article-lifecycle.json`

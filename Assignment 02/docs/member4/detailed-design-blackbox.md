@@ -29,7 +29,7 @@ The design follows Assignment 02 "Mainly" flow:
 
 Coverage items are defined in:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/artifacts.json`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/artifacts.json`
 - `coverage_items[]`
 
 Primary coverage items:
@@ -62,7 +62,7 @@ Primary coverage items:
 
 Final frozen set includes 18 cases (`TC-001` to `TC-018`) in:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/test-cases.csv`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/test-cases.csv`
 
 Highlights:
 
@@ -87,7 +87,7 @@ Mapped cases: `TC-010`,`TC-011`,`TC-012`,`TC-013`
 
 Traceability artifact:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/traceability.csv`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/traceability.csv`
 
 Mapping chain:
 
@@ -118,13 +118,13 @@ Template used:
 
 ### 7.1 Baseline (AI, revision 0)
 
-- Path: `Assignment 02/data/black-box-design/runs/article-lifecycle-ai-run-20260527/baseline/`
+- Path: `Assignment 02/outputs/black-box-design/runs/article-lifecycle-ai-run-20260527/baseline/`
 - Cases: 16
 - Key gap found during review: missing explicit unauthorized update/delete negatives.
 
 ### 7.2 Final (revision 2)
 
-- Path: `Assignment 02/data/black-box-design/final/article-lifecycle/`
+- Path: `Assignment 02/outputs/black-box-design/final/article-lifecycle/`
 - Cases: 18
 - Added auth-negative branches for update/delete.
 - Refined post-delete expected result wording for verifiability and implementation tolerance.
@@ -133,12 +133,12 @@ Template used:
 
 Revision inputs:
 
-- `Assignment 02/data/review/article-lifecycle-rev1.json`
-- `Assignment 02/data/review/article-lifecycle-rev2.json`
+- `Assignment 02/inputs/review/article-lifecycle-rev1.json`
+- `Assignment 02/inputs/review/article-lifecycle-rev2.json`
 
 Revision log:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/revision_log.json`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/revision_log.json`
 
 ### 8.1 Before/After Summary
 
@@ -153,10 +153,10 @@ Revision log:
 
 Handoff package:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/HANDOFF.md`
-- `Assignment 02/data/black-box-design/final/article-lifecycle/test-cases.csv`
-- `Assignment 02/data/black-box-design/final/article-lifecycle/traceability.csv`
-- `Assignment 02/data/black-box-design/final/article-lifecycle/report.md`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/HANDOFF.md`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/test-cases.csv`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/traceability.csv`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/report.md`
 
 Execution target remains implementation-neutral and can be applied to both ASP.NET Core and Golang-Gin implementations.
 
@@ -164,12 +164,12 @@ Execution target remains implementation-neutral and can be applied to both ASP.N
 
 Authoritative AI run:
 
-- `Assignment 02/data/black-box-design/runs/article-lifecycle-ai-run-20260527/`
+- `Assignment 02/outputs/black-box-design/runs/article-lifecycle-ai-run-20260527/`
 
 Execution evidence:
 
-- `Assignment 02/data/black-box-design/final/article-lifecycle/RUN_LOG.json`
-- `Assignment 02/data/black-box-design/final/article-lifecycle/RUN_LOG.md`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/RUN_LOG.json`
+- `Assignment 02/outputs/black-box-design/final/article-lifecycle/RUN_LOG.md`
 
 Execution type:
 
