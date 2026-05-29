@@ -142,12 +142,12 @@ Revision log:
 
 ### 8.1 Before/After Summary
 
-| Aspect | Baseline v1 | Final v2 | Improvement |
-| --- | --- | --- | --- |
-| Test case count | 16 | 18 | Added `TC-017`,`TC-018` |
-| Update auth negative | Not explicit | Explicit | Added EP-11 branch |
-| Delete auth negative | Not explicit | Explicit | Added EP-12 branch |
-| Post-delete expected result | Generic fail wording | Not-found style, verifiable wording | Better oracle clarity |
+| Aspect                      | Baseline v1          | Final v2                            | Improvement             |
+| --------------------------- | -------------------- | ----------------------------------- | ----------------------- |
+| Test case count             | 16                   | 18                                  | Added `TC-017`,`TC-018` |
+| Update auth negative        | Not explicit         | Explicit                            | Added EP-11 branch      |
+| Delete auth negative        | Not explicit         | Explicit                            | Added EP-12 branch      |
+| Post-delete expected result | Generic fail wording | Not-found style, verifiable wording | Better oracle clarity   |
 
 ## 9. Handoff to Execution (Member5)
 
