@@ -129,7 +129,9 @@ Minimum fields per requirement:
   "input_fields": ["email", "password"],
   "data_ranges": [],
   "conditions": ["The account exists", "The credentials are valid"],
-  "expected_actions": ["The system creates an authenticated session and redirects the user."],
+  "expected_actions": [
+    "The system creates an authenticated session and redirects the user."
+  ],
   "notes": "Source: README.md, Authentication section. Type: functional. Confidence: medium. Constraint: password must not be exposed in logs."
 }
 ```

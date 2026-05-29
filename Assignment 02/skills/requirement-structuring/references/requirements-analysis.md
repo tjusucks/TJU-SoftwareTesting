@@ -67,23 +67,23 @@ into `notes`, top-level arrays, or the human-readable review summary.
 
 For every item, identify these fields when available:
 
-| Field | Purpose |
-| --- | --- |
-| `id` | Stable `R*` requirement ID, assigned during specification |
-| `title` | Short human-readable summary |
-| `type` | `functional`, `non_functional`, `constraint`, `business_rule`, or `data_rule` |
-| `component` | Product area such as `auth`, `article`, `comment`, or `profile` |
-| `actor` | User or system role |
-| `action` | Main verb or capability |
-| `object` | Entity acted on |
-| `description` | Complete normalized statement for the final schema |
-| `conditions` | Preconditions, triggers, or contextual rules |
-| `constraints` | Hard limits, policy rules, technology restrictions, standards |
-| `expected_actions` | Observable system results for the final schema |
-| `source` | Evidence record from input inventory |
-| `confidence` | `high`, `medium`, or `low` |
-| `status` | `candidate`, `accepted`, `needs_review`, or `rejected` |
-| `open_questions` | Missing information for human review |
+| Field              | Purpose                                                                       |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `id`               | Stable `R*` requirement ID, assigned during specification                     |
+| `title`            | Short human-readable summary                                                  |
+| `type`             | `functional`, `non_functional`, `constraint`, `business_rule`, or `data_rule` |
+| `component`        | Product area such as `auth`, `article`, `comment`, or `profile`               |
+| `actor`            | User or system role                                                           |
+| `action`           | Main verb or capability                                                       |
+| `object`           | Entity acted on                                                               |
+| `description`      | Complete normalized statement for the final schema                            |
+| `conditions`       | Preconditions, triggers, or contextual rules                                  |
+| `constraints`      | Hard limits, policy rules, technology restrictions, standards                 |
+| `expected_actions` | Observable system results for the final schema                                |
+| `source`           | Evidence record from input inventory                                          |
+| `confidence`       | `high`, `medium`, or `low`                                                    |
+| `status`           | `candidate`, `accepted`, `needs_review`, or `rejected`                        |
+| `open_questions`   | Missing information for human review                                          |
 
 ---
 
@@ -126,11 +126,11 @@ requirements if the source treats them independently.
 
 Separate these concepts explicitly:
 
-| Concept | Meaning | Example |
-| --- | --- | --- |
-| Condition | When the requirement applies | "When the user is authenticated" |
-| Constraint | A hard rule or limitation | "Password must be at least 8 characters" |
-| Expected behavior | Observable result | "The article is saved and visible in the feed" |
+| Concept           | Meaning                      | Example                                        |
+| ----------------- | ---------------------------- | ---------------------------------------------- |
+| Condition         | When the requirement applies | "When the user is authenticated"               |
+| Constraint        | A hard rule or limitation    | "Password must be at least 8 characters"       |
+| Expected behavior | Observable result            | "The article is saved and visible in the feed" |
 
 Avoid burying these in a long prose requirement. Downstream risk and test design depend
 on these fields being easy to read.
