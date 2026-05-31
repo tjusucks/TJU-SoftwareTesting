@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "feature_id": "article-lifecycle",
+  "input_mode": "standalone",
+  "feature_spec_path": "Assignment 01/codebases/realworld/specification/features/article-lifecycle.md",
+  "structured_requirements_path": "Assignment 02/inputs/reference/structured-requirements/article-lifecycle.json",
+  "risk_analysis_path": "Assignment 02/inputs/reference/risk-analysis/article-lifecycle.json",
+  "review_context": {
+    "revision": 2,
+    "designer_revisions_path": "Assignment 02/inputs/review/article-lifecycle-rev2.json"
+  }
+}

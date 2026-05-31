@@ -1,0 +1,42 @@
+[
+  {
+    "revision": 1,
+    "source": "Assignment 02/inputs/review/article-lifecycle-rev1.json",
+    "designer_action": "interactive_review",
+    "applied_at": "2026-05-27T16:09:51+08:00",
+    "changes": [
+      {
+        "action": "add",
+        "target_type": "coverage_item",
+        "target_id": "CI-12",
+        "summary": "Added unauthorized update/delete negative partition coverage."
+      },
+      {
+        "action": "add",
+        "target_type": "test_case",
+        "target_id": "TC-017",
+        "summary": "Added unauthenticated update rejection test."
+      },
+      {
+        "action": "add",
+        "target_type": "test_case",
+        "target_id": "TC-018",
+        "summary": "Added unauthenticated delete rejection test."
+      }
+    ]
+  },
+  {
+    "revision": 2,
+    "source": "Assignment 02/inputs/review/article-lifecycle-rev2.json",
+    "designer_action": "interactive_review",
+    "applied_at": "2026-05-27T16:09:51+08:00",
+    "changes": [
+      {
+        "action": "modify",
+        "target_type": "test_case",
+        "target_id": "TC-016",
+        "summary": "Refined expected result to explicit not-found semantics with implementation tolerance."
+      }
+    ]
+  }
+]

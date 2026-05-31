@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Skills for software testing",
-    "version": "1.0.1"
+    "version": "2.0.0"
   },
   "plugins": [
     {
@@ -14,6 +14,12 @@
       "description": "Skill for automated black-box testing based on the requirements specification.",
       "source": "./Assignment 01/blackbox-testing",
       "version": "1.0.1"
+    },
+    {
+      "name": "test-design",
+      "description": "AI-driven AutoTestDesign tool. Includes requirement structuring, risk analysis, black-box design, white-box modeling, and other testing skills.",
+      "source": "./Assignment 02",
+      "version": "1.0.0"
     }
   ]
 }

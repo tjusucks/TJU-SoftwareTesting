@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assignment02/black-box-output.schema.json",
+  "title": "BlackBoxOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_metadata",
+    "coverage_items",
+    "equivalence_partitions",
+    "boundary_values",
+    "decision_tables",
+    "test_scenarios",
+    "test_cases",
+    "traceability",
+    "coverage_metrics"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^1\\.0$"
+    },
+    "run_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "feature_id",
+        "prompt_version",
+        "revision",
+        "generated_at"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "feature_id": {
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "generated_at": {
+          "type": "string"
+        }
+      }
+    },
+    "coverage_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "requirement_ids",
+          "technique",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CI-[0-9]+$"
+          },
+          "requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^R[0-9]+$"
+            }
+          },
+          "technique": {
+            "type": "string",
+            "enum": [
+              "EP",
+              "BVA",
+              "DT",
+              "Scenario",
+              "Edge"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "equivalence_partitions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "boundary_values": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "decision_tables": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "test_scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "requirement_ids",
+          "priority",
+          "steps",
+          "expected_result"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^TC-[0-9]{3}$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^R[0-9]+$"
+            }
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "High",
+              "Medium",
+              "Low"
+            ]
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_result": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "traceability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "requirement_id",
+          "coverage_item_id",
+          "technique",
+          "analysis_id",
+          "test_case_ids"
+        ],
+        "properties": {
+          "requirement_id": {
+            "type": "string"
+          },
+          "coverage_item_id": {
+            "type": "string"
+          },
+          "technique": {
+            "type": "string"
+          },
+          "analysis_id": {
+            "type": "string"
+          },
+          "test_case_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "coverage_metrics": {
+      "type": "object",
+      "required": [
+        "requirement_coverage",
+        "ep_coverage",
+        "bva_coverage",
+        "dt_coverage",
+        "duplicate_case_rate"
+      ],
+      "properties": {
+        "requirement_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "ep_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bva_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dt_coverage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "duplicate_case_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "revision_log": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}
