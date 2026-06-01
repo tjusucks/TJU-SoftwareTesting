@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0",
+  "feature_id": "article-lifecycle",
+  "items": [
+    {
+      "risk_id": "RK1",
+      "requirement_id": "R1",
+      "risk_categories": ["Authentication", "Authorization"],
+      "impact": 4,
+      "likelihood": 2,
+      "risk_score": 8,
+      "priority": "Medium",
+      "rationale": "Authentication gate for article creation. Failure would allow unauthenticated article creation, leading to content pollution. JWT enforcement is standard but critical; failure mode is well-understood, reducing likelihood.",
+      "recommendations": [
+        "Include negative tests for missing, expired, and malformed tokens",
+        "Verify 401 response on unauthenticated create attempts"
+      ]
+    },
+    {
+      "risk_id": "RK2",
+      "requirement_id": "R2",
+      "risk_categories": ["BusinessLogic", "DataPersistence", "InputValidation"],
+      "impact": 4,
+      "likelihood": 2,
+      "risk_score": 8,
+      "priority": "Medium",
+      "rationale": "Core article creation flow. Failure blocks the primary feature path. Standard CRUD operation with well-defined payload reduces likelihood of defect, but impact on user experience is major if broken.",
+      "recommendations": [
+        "Verify successful creation with minimal valid payload",
+        "Verify creation with full payload including tagList",
+        "Verify author association in created response"
+      ]
+    },
+    {
+      "risk_id": "RK3",
+      "requirement_id": "R3",
+      "risk_categories": ["APIContract", "DataIntegrity"],
+      "impact": 3,
+      "likelihood": 2,
+      "risk_score": 6,
+      "priority": "Low",
+      "rationale": "Response format contract. Missing or incorrect fields break client integration but do not affect data integrity server-side. Standard REST response format reduces likelihood of deviation.",
+      "recommendations": [
+        "Validate all expected fields in create response",
+        "Verify slug format, author metadata, and tagList structure"
+      ]
+    },
+    {
+      "risk_id": "RK4",
+      "requirement_id": "R4",
+      "risk_categories": ["InputValidation", "ErrorHandling"],
+      "impact": 3,
+      "likelihood": 4,
+      "risk_score": 12,
+      "priority": "Medium",
+      "rationale": "Input validation for required fields. The local fixture does not specify exact maximum lengths, whitespace handling, or tag validation rules, increasing likelihood of edge-case defects. Impact is moderate because invalid payloads are rejected rather than corrupting data.",
+      "recommendations": [
+        "Test field omission for each required field individually",
+        "Test empty string, whitespace-only, and very long values",
+        "Verify descriptive validation error responses"
+      ]
+    },
+    {
+      "risk_id": "RK5",
+      "requirement_id": "R5",
+      "risk_categories": ["Authorization", "BusinessLogic", "DataPersistence"],
+      "impact": 4,
+      "likelihood": 2,
+      "risk_score": 8,
+      "priority": "Medium",
+      "rationale": "Owner article update. Failure could allow unauthorized modification or prevent legitimate edits. Standard PUT semantics and slug-based identification reduce likelihood, but impact on data integrity is major.",
+      "recommendations": [
+        "Verify owner can update each modifiable field",
+        "Verify response returns updated representation",
+        "Verify author is preserved after update"
+      ]
+    },
+    {
+      "risk_id": "RK6",
+      "requirement_id": "R6",
+      "risk_categories": ["DataIntegrity", "BusinessLogic"],
+      "impact": 3,
+      "likelihood": 3,
+      "risk_score": 9,
+      "priority": "Medium",
+      "rationale": "Partial update field preservation. The local fixture does not specify partial-update semantics; implementations may overwrite omitted fields with defaults. This ambiguity raises likelihood of behavioral variation.",
+      "recommendations": [
+        "Test partial update with only one field supplied",
+        "Verify omitted fields retain original values",
+        "Review backend partial-update implementation approach"
+      ]
+    },
+    {
+      "risk_id": "RK7",
+      "requirement_id": "R7",
+      "risk_categories": ["Authentication", "Authorization", "ErrorHandling"],
+      "impact": 5,
+      "likelihood": 3,
+      "risk_score": 15,
+      "priority": "High",
+      "rationale": "Security boundary for edit operations. Failure could allow unauthorized article modification. Owner-check logic is a common source of authorization bypass vulnerabilities. Critical impact due to data integrity and business rule violation.",
+      "recommendations": [
+        "Test edit with missing and invalid tokens",
+        "Test edit with valid non-owner token",
+        "Verify 401/403 response and no side effects on article data"
+      ]
+    },
+    {
+      "risk_id": "RK8",
+      "requirement_id": "R8",
+      "risk_categories": ["Authorization", "BusinessLogic", "DataPersistence"],
+      "impact": 4,
+      "likelihood": 2,
+      "risk_score": 8,
+      "priority": "Medium",
+      "rationale": "Owner article deletion. Standard DELETE operation with slug identification. Failure could prevent legitimate deletion or allow unauthorized deletion. Impact major due to data loss potential.",
+      "recommendations": [
+        "Verify owner can delete owned article",
+        "Verify successful deletion response",
+        "Verify article is no longer retrievable after deletion"
+      ]
+    },
+    {
+      "risk_id": "RK9",
+      "requirement_id": "R9",
+      "risk_categories": ["DataIntegrity", "StateTransition"],
+      "impact": 4,
+      "likelihood": 3,
+      "risk_score": 12,
+      "priority": "Medium",
+      "rationale": "Post-deletion retrieval behavior. The exact not-found status and response body are not defined by the local fixture. Soft-delete implementations may behave differently from hard-delete, introducing likelihood of inconsistent behavior.",
+      "recommendations": [
+        "Verify GET returns not-found after deletion",
+        "Verify response status code for deleted article retrieval"
+      ]
+    },
+    {
+      "risk_id": "RK10",
+      "requirement_id": "R10",
+      "risk_categories": ["Authentication", "Authorization", "ErrorHandling"],
+      "impact": 5,
+      "likelihood": 3,
+      "risk_score": 15,
+      "priority": "High",
+      "rationale": "Security boundary for delete operations. Failure could allow unauthorized article deletion. Owner-check logic for deletion is a critical security control. Non-owner rejection is an expected ownership rule that must be verified against implementation.",
+      "recommendations": [
+        "Test delete with missing and invalid tokens",
+        "Test delete with valid non-owner token",
+        "Verify 401/403 response and article remains accessible afterward"
+      ]
+    },
+    {
+      "risk_id": "RK11",
+      "requirement_id": "R11",
+      "risk_categories": ["DataPersistence", "DataIntegrity", "StateTransition"],
+      "impact": 4,
+      "likelihood": 3,
+      "risk_score": 12,
+      "priority": "Medium",
+      "rationale": "Update persistence observability. If title changes cause slug regeneration, subsequent reads using the old slug may fail. Caching layers could serve stale data. Impact major because lifecycle persistence is a core business rule.",
+      "recommendations": [
+        "Verify updated values persist across subsequent detail reads",
+        "Verify slug regeneration behavior if title changes",
+        "Verify updatedAt or equivalent metadata is refreshed"
+      ]
+    },
+    {
+      "risk_id": "RK12",
+      "requirement_id": "R12",
+      "risk_categories": ["DataIntegrity", "StateTransition", "APIContract"],
+      "impact": 4,
+      "likelihood": 3,
+      "risk_score": 12,
+      "priority": "Medium",
+      "rationale": "Comprehensive deletion observability across detail and list endpoints. Deleted articles may remain visible due to caching, pagination inconsistencies, or filter-edge cases. Local fixture does not define list behavior after deletion, increasing likelihood of gaps.",
+      "recommendations": [
+        "Verify deleted article absent from detail, global list, and filtered lists",
+        "Verify other active articles remain visible in lists",
+        "Test with author, tag, and favorited filters"
+      ]
+    }
+  ]
+}
