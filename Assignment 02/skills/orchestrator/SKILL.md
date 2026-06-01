@@ -102,19 +102,26 @@ replaced by that skill's workflow.
 
 ### Stage 4: White-Box Modeling
 
-**Sub-skill**: not yet available — use inline fallback.
+**Sub-skill**: `white-box-modeling`
 
-**Fallback behavior**:
-
-1. Based on the structured requirements and black-box results from previous stages, model system behavior using state transition diagrams or control flow graphs.
-2. Identify states, transitions, and coverage criteria (e.g., all-states, all-transitions).
-3. Generate white-box test sequences that complement the black-box test cases.
-4. Write output to `outputs/white-box-modeling/{feature_id}/`.
+1. Construct the white-box input configuration:
+   - `feature_id` from user input.
+   - `input_mode`: `orchestrated`.
+   - `structured_requirements_path`: Stage 1 output.
+   - `black_box_artifacts_path`: Stage 3 output, preferably `artifacts.json`.
+   - `source_code_paths`: user-provided codebase paths or inferred relevant module paths.
+   - `target_module_path`: the primary implementation module if known.
+   - `entry_points`: target functions, handlers, routes, endpoints, or UI actions if known.
+   - `generate_executable_tests`: `true` only if the designer explicitly requests executable tests.
+   - `test_framework` and `test_output_path`: include only when executable tests are requested or specified.
+2. Execute the white-box-modeling workflow as defined in its SKILL.md.
+3. Write output to `outputs/white-box-modeling/{feature_id}/`.
+4. Present a summary: model type, coverage criterion, states/transitions or nodes/edges, white-box path count, and executable test status.
 5. **Pause for review.**
+6. If revisions are provided, write revision JSON to `inputs/review/`, re-run with `review_context`, then re-present.
+7. On confirmation, proceed to Stage 5.
 
-Note: generating executable test code is optional. The focus is on modeling and test sequence design.
-
-When a dedicated `white-box-modeling` skill becomes available, this fallback is replaced by that skill's workflow.
+Note: generating executable test code is optional. The required output is the white-box model and test path design.
 
 ### Stage 5: Final Export
 
