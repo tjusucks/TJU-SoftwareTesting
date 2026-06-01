@@ -1,4 +1,4 @@
-# Assignment 02 White-Box Modeling Report Template
+# White-Box Modeling Report Template
 
 ## 1. Run Metadata
 

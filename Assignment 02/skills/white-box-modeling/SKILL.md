@@ -1,11 +1,11 @@
 ---
 name: white-box-modeling
-description: Assignment 02 white-box modeling skill for generating state transitions or logic/control-flow paths for a selected module, plus white-box test design guidance and traceability.
+description: Use when modeling internal behavior for a target feature or module using state transitions, control-flow paths, logic paths, or branch/decision coverage. Produces white-box test paths, coverage rationale, traceability, and reviewable artifacts.
 license: Apache-2.0
 user-invocable: true
 ---
 
-# White-Box Modeling (Assignment 02)
+# White-Box Modeling
 
 ## Purpose
 
@@ -15,8 +15,7 @@ analyze a **specific module** and generate:
 - state transition models or
 - logic/control-flow paths
 
-These artifacts are then used to derive **white-box test design** as a bonus
-component for Assignment 02.
+These artifacts are then used to derive **white-box test design** for the selected feature or module.
 
 ## Scope
 
@@ -43,9 +42,19 @@ fields (if provided):
 - `input_mode` (`standalone`, `integrated`, `orchestrated`)
 - `feature_spec_path`
 - `structured_requirements_path`
-- `target_module_path` (optional source code or design doc path)
+- `source_code_paths` (source files or directories relevant to the target feature)
+- `target_module_path` (primary source code or design doc path)
+- `entry_points` (functions, endpoints, routes, handlers, or UI actions to model)
+- `black_box_artifacts_path` (optional handoff from black-box design)
 - `review_context.revision` (optional)
 - `review_context.designer_revisions_path` (optional)
+
+### Input Source Roles
+
+- Requirements define the intended behavior and provide requirement IDs for traceability.
+- Source code and design docs reveal internal states, branches, guards, and paths.
+- Black-box artifacts help avoid duplicate coverage and identify internal paths that complement existing test cases.
+- If source code is not available, derive only a logical model from requirements and clearly mark the model elements as assumptions.
 
 ### Input Mode Rules
 
@@ -76,9 +85,11 @@ Follow these steps strictly:
    - **For State Model**: Define states, transitions, guards, and actions.
    - **For Path Model**: Define nodes (decisions, statements), edges, conditions, and branches.
 
-4. **Coverage Strategy**
+4. **Coverage Strategy and Path Optimization**
    - Define target coverage criteria (e.g., state coverage, transition coverage, branch/decision coverage).
-   - Trace and select a minimal set of paths to satisfy the specified coverage.
+   - Generate candidate paths or sequences for the chosen model.
+   - Select the smallest practical set of paths that satisfies the chosen coverage criterion.
+   - If multiple equivalent path sets exist, prefer paths that cover high-risk requirements or complement black-box coverage.
 
 5. **Derive White-Box Test Paths**
    - Create path IDs (`WB-PATH-*`) and link to requirements where possible.
@@ -86,9 +97,39 @@ Follow these steps strictly:
 
 6. **Review Loop**
    - If `designer_revisions_path` exists, apply revisions and log changes.
+   - After revisions, re-check the model, coverage criteria, selected paths, and traceability.
 
 7. **Export**
    - Generate `report.md` and `artifacts.json`.
+
+## Review / Revision Behavior
+
+Revision input follows the shared revision contract:
+
+- `schemas/designer-revisions.schema.json`
+
+Supported actions:
+
+- `add`
+- `modify`
+- `remove`
+
+Supported target types:
+
+- `state`
+- `transition`
+- `node`
+- `edge`
+- `white_box_path`
+- `traceability`
+
+If revision input is present, you must:
+
+- Apply each revision deterministically.
+- Record before/after summary in `revision_log.json`.
+- Preserve stable IDs where possible.
+- Recalculate coverage metrics and update traceability.
+- Re-present the revised model and path set for designer confirmation.
 
 ## Output Contract
 
@@ -105,8 +146,8 @@ outputs/white-box-modeling/{feature_id}/
 
 The machine-readable output must validate against:
 
-- `Assignment 02/schemas/white-box-output.schema.json`
+- `schemas/white-box-output.schema.json`
 
 `report.md` should follow:
 
-- `Assignment 02/skills/white-box-modeling/template.md`
+- `skills/white-box-modeling/template.md`
