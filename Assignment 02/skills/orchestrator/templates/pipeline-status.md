@@ -7,7 +7,7 @@
 | Requirement Structuring |        | skill            | outputs/structured-requirements/{feature_id}/ |
 | Risk Analysis           |        | fallback / skill | outputs/risk-analysis/{feature_id}/           |
 | Black-Box Design        |        | skill            | outputs/black-box-design/runs/{run_id}/       |
-| White-Box Modeling      |        | skill / fallback | outputs/white-box-modeling/{feature_id}/      |
+| White-Box Modeling      |        | skill            | outputs/white-box-modeling/{feature_id}/      |
 
 ## Metrics
 

@@ -49,14 +49,19 @@
 
 ## 5. White-Box Modeling Summary
 
-| Metric         | Count |
-| -------------- | ----- |
-| States         |       |
-| Transitions    |       |
-| Test Sequences |       |
+| Metric                 | Count |
+| ---------------------- | ----- |
+| States                 |       |
+| Transitions            |       |
+| Nodes                  |       |
+| Edges                  |       |
+| Test Paths             |       |
+| Executable Test Cases   |       |
 
 - Coverage criterion:
 - Model type: state transition / control flow
+- Executable tests generated: Yes / No
+- Test framework:
 
 (Source: Stage 4 — White-Box Modeling)
 
