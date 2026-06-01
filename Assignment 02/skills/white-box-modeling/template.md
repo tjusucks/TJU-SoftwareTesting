@@ -113,7 +113,16 @@
 - Modified:
 - Removed:
 
-## 10. Export Index
+## 10. Optional Executable Tests
+
+- Generated executable tests: Yes / No
+- Test framework:
+- Test output path:
+- Related white-box path IDs:
+- Notes:
+
+## 11. Export Index
 
 - `artifacts.json`:
+- `tests/`:
 - `revision_log.json`:

@@ -46,6 +46,9 @@ fields (if provided):
 - `target_module_path` (primary source code or design doc path)
 - `entry_points` (functions, endpoints, routes, handlers, or UI actions to model)
 - `black_box_artifacts_path` (optional handoff from black-box design)
+- `generate_executable_tests` (optional boolean; default `false`)
+- `test_framework` (optional; e.g., Playwright, PyTest, JUnit, Jest)
+- `test_output_path` (optional; where generated test code should be written)
 - `review_context.revision` (optional)
 - `review_context.designer_revisions_path` (optional)
 
@@ -99,8 +102,16 @@ Follow these steps strictly:
    - If `designer_revisions_path` exists, apply revisions and log changes.
    - After revisions, re-check the model, coverage criteria, selected paths, and traceability.
 
-7. **Export**
+7. **Optional Executable Test Generation**
+   - Only generate executable test code when `generate_executable_tests` is true or the designer explicitly requests it.
+   - Generate tests from the selected white-box paths, not from unrelated assumptions.
+   - Each generated test should reference the corresponding `WB-PATH-*` ID and requirement ID where available.
+   - Use the requested `test_framework` if provided; otherwise recommend a suitable framework and ask for confirmation before writing code.
+   - Treat generated tests as optional implementation artifacts; the required output remains the white-box model and test path design.
+
+8. **Export**
    - Generate `report.md` and `artifacts.json`.
+   - If executable tests are generated, write them to `test_output_path` or `outputs/white-box-modeling/{feature_id}/tests/`.
 
 ## Review / Revision Behavior
 
@@ -139,6 +150,7 @@ If revision input is present, you must:
 outputs/white-box-modeling/{feature_id}/
 ├── report.md
 ├── artifacts.json
+├── tests/              # present only if executable tests were requested
 └── revision_log.json   # present only if revisions were applied
 ```
 
