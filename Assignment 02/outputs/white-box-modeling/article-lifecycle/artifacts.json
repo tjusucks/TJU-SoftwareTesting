@@ -1,0 +1,363 @@
+{
+  "schema_version": "1.0",
+  "run_metadata": {
+    "run_id": "A2-WB-ARTICLE-LIFECYCLE-R0",
+    "feature_id": "article-lifecycle",
+    "prompt_version": "v1.0",
+    "revision": 0,
+    "generated_at": "2026-06-01T00:00:00+00:00"
+  },
+  "model_type": "state",
+  "states": [
+    {
+      "id": "S0",
+      "name": "ArticleAbsent",
+      "notes": "No active article exists for the target slug; this is the initial state before create and the observable state after deletion."
+    },
+    {
+      "id": "S1",
+      "name": "ArticleActiveOriginal",
+      "notes": "A persisted active article exists with initial title, description, body, author, slug, timestamps, and optional tag associations."
+    },
+    {
+      "id": "S2",
+      "name": "ArticleActiveContentUpdated",
+      "notes": "The owner has updated one or more persisted content fields; omitted fields are preserved by validator prefill. A title update regenerates the slug from the new title."
+    },
+    {
+      "id": "S3",
+      "name": "ArticleActiveTagsUpdated",
+      "notes": "The active article has tag associations replaced or cleared by update payload tagList handling."
+    },
+    {
+      "id": "S4",
+      "name": "ArticleDeletedUnavailable",
+      "notes": "The article row has been deleted through GORM Delete and is no longer returned by normal detail/list queries."
+    },
+    {
+      "id": "S5",
+      "name": "RequestRejectedNoMutation",
+      "notes": "A protected request or validation/ownership branch rejects the request before mutating the article state."
+    }
+  ],
+  "transitions": [
+    {
+      "id": "T1",
+      "from": "S0",
+      "to": "S5",
+      "guard": "POST /api/articles reaches the authenticated route group without a valid token.",
+      "action": "AuthMiddleware(true) aborts with 401 before ArticleCreate runs; no ArticleModel is saved.",
+      "requirement_ids": ["R1"]
+    },
+    {
+      "id": "T2",
+      "from": "S0",
+      "to": "S5",
+      "guard": "Authenticated create payload is missing required fields, has title shorter than min=4, or violates max sizes.",
+      "action": "ArticleModelValidator.Bind returns an error; ArticleCreate responds 422 and skips SaveOne.",
+      "requirement_ids": ["R4"]
+    },
+    {
+      "id": "T3",
+      "from": "S0",
+      "to": "S1",
+      "guard": "Authenticated create payload has valid title, description, body, and omitted or empty tagList.",
+      "action": "Bind creates slug, assigns author, setTags takes the zero-tag branch, SaveOne persists the article, and ArticleSerializer returns 201 response fields.",
+      "requirement_ids": ["R2", "R3"]
+    },
+    {
+      "id": "T4",
+      "from": "S0",
+      "to": "S1",
+      "guard": "Authenticated create payload has valid fields and non-empty tagList.",
+      "action": "setTags fetches or creates TagModel rows, assigns article tags, SaveOne persists article/tag associations, and serializer sorts tagList.",
+      "requirement_ids": ["R2", "R3"]
+    },
+    {
+      "id": "T5",
+      "from": "S0",
+      "to": "S5",
+      "guard": "PUT /api/articles/{slug} uses a slug with no active article.",
+      "action": "ArticleUpdate returns 404 from the FindOneArticle failure before ownership, binding, or update logic.",
+      "requirement_ids": []
+    },
+    {
+      "id": "T6",
+      "from": "S1",
+      "to": "S5",
+      "guard": "PUT target exists, but authenticated requester is not the article author.",
+      "action": "AuthorID is compared with GetArticleUserModel(currentUser).ID; mismatch returns 403 and the persisted article remains unchanged.",
+      "requirement_ids": ["R7"]
+    },
+    {
+      "id": "T7",
+      "from": "S1",
+      "to": "S5",
+      "guard": "PUT target exists and requester is owner, but the update payload violates validator constraints such as short title or null/invalid tagList binding.",
+      "action": "NewArticleModelValidatorFillWith preloads existing fields, Bind fails, ArticleUpdate returns 422 and skips model.Update.",
+      "requirement_ids": ["R4"]
+    },
+    {
+      "id": "T8",
+      "from": "S1",
+      "to": "S2",
+      "guard": "PUT target exists, requester is owner, and payload supplies a valid partial content update while omitting tagList.",
+      "action": "Validator prefill preserves omitted fields and existing tags; model.Update applies supplied content changes and serializer returns updated article.",
+      "requirement_ids": ["R5", "R6", "R11"]
+    },
+    {
+      "id": "T9",
+      "from": "S1",
+      "to": "S2",
+      "guard": "PUT target exists, requester is owner, and payload supplies a valid replacement title.",
+      "action": "Bind regenerates Slug with slug.Make(new title); model.Update stores the new title/slug and later reads must use the returned current slug.",
+      "requirement_ids": ["R5", "R11"]
+    },
+    {
+      "id": "T10",
+      "from": "S1",
+      "to": "S3",
+      "guard": "PUT target exists, requester is owner, and payload explicitly contains tagList: [].",
+      "action": "setTags takes the len(tags)==0 branch, assigns an empty tag slice, and model.Update clears article tag associations.",
+      "requirement_ids": ["R5", "R6", "R11"]
+    },
+    {
+      "id": "T11",
+      "from": "S1",
+      "to": "S3",
+      "guard": "PUT target exists, requester is owner, and payload contains a non-empty tagList.",
+      "action": "setTags fetches existing tags, creates missing tags, replaces the article tag slice, and serializer returns the sorted replacement tagList.",
+      "requirement_ids": ["R5", "R6", "R11"]
+    },
+    {
+      "id": "T12",
+      "from": "S1",
+      "to": "S5",
+      "guard": "DELETE target exists, but authenticated requester is not the article author.",
+      "action": "ArticleDelete performs ownership check after successful FindOneArticle, returns 403 on mismatch, and skips DeleteArticleModel.",
+      "requirement_ids": ["R10"]
+    },
+    {
+      "id": "T13",
+      "from": "S1",
+      "to": "S4",
+      "guard": "DELETE target exists and requester is the article author.",
+      "action": "ArticleDelete passes ownership check, DeleteArticleModel calls GORM Delete by slug, and the handler returns 200 delete success.",
+      "requirement_ids": ["R8", "R9", "R12"]
+    },
+    {
+      "id": "T14",
+      "from": "S4",
+      "to": "S4",
+      "guard": "GET /api/articles/{slug} is requested for a deleted article slug.",
+      "action": "FindOneArticle cannot find an active row and ArticleRetrieve returns 404 Invalid slug.",
+      "requirement_ids": ["R9", "R12"]
+    },
+    {
+      "id": "T15",
+      "from": "S4",
+      "to": "S4",
+      "guard": "GET /api/articles list or filtered list is requested after deletion.",
+      "action": "FindManyArticle uses normal GORM queries/associations, so the deleted article is excluded from active list results and counts.",
+      "requirement_ids": ["R12"]
+    },
+    {
+      "id": "T16",
+      "from": "S0",
+      "to": "S0",
+      "guard": "DELETE /api/articles/{slug} uses a slug with no active article.",
+      "action": "ArticleDelete skips ownership check when FindOneArticle fails, still calls DeleteArticleModel, and returns 200 if the delete operation reports no database error.",
+      "requirement_ids": []
+    },
+    {
+      "id": "T17",
+      "from": "S1",
+      "to": "S5",
+      "guard": "PUT /api/articles/{slug} reaches the authenticated route group without a valid token.",
+      "action": "AuthMiddleware(true) aborts with 401 before ArticleUpdate runs; article remains unchanged.",
+      "requirement_ids": ["R7"]
+    },
+    {
+      "id": "T18",
+      "from": "S1",
+      "to": "S5",
+      "guard": "DELETE /api/articles/{slug} reaches the authenticated route group without a valid token.",
+      "action": "AuthMiddleware(true) aborts with 401 before ArticleDelete runs; article remains active.",
+      "requirement_ids": ["R10"]
+    }
+  ],
+  "paths": [
+    {
+      "id": "WB-PATH-01",
+      "type": "negative-auth-create",
+      "steps": ["T1"],
+      "coverage": [
+        "Auth reject branch for protected create",
+        "No-persistence rejection state"
+      ],
+      "requirement_ids": ["R1"],
+      "test_intent": "Confirm the protected create route is blocked by middleware before validation or persistence when no token is supplied.",
+      "expected_internal_effect": "Context user remains zero, ArticleCreate is not executed, and no ArticleModel row is inserted."
+    },
+    {
+      "id": "WB-PATH-02",
+      "type": "negative-validation-create",
+      "steps": ["T2"],
+      "coverage": ["Create validator failure branch", "SaveOne skipped branch"],
+      "requirement_ids": ["R4"],
+      "test_intent": "Exercise required/min/max create validation and prove invalid data does not reach persistence.",
+      "expected_internal_effect": "ArticleModelValidator.Bind returns a validation error; SaveOne is not called and article count/lookup remains unchanged."
+    },
+    {
+      "id": "WB-PATH-03",
+      "type": "happy-create-no-tags",
+      "steps": ["T3"],
+      "coverage": [
+        "Create success branch",
+        "setTags zero-tag branch",
+        "Serializer response field branch"
+      ],
+      "requirement_ids": ["R2", "R3"],
+      "test_intent": "Create an article with valid required fields and omitted or empty tags.",
+      "expected_internal_effect": "Slug is generated from title, ArticleUserModel is associated to the current user, an ArticleModel row is saved, Tags is empty, and response includes identity/content/author metadata."
+    },
+    {
+      "id": "WB-PATH-04",
+      "type": "happy-create-with-tags",
+      "steps": ["T4"],
+      "coverage": [
+        "setTags non-empty branch",
+        "TagModel fetch/create branch",
+        "Tag serialization branch"
+      ],
+      "requirement_ids": ["R2", "R3"],
+      "test_intent": "Create an article with a non-empty tagList to cover tag association creation and response sorting.",
+      "expected_internal_effect": "Existing tags are reused or missing tags are created, article_tags associations are saved, and serializer returns a sorted tagList."
+    },
+    {
+      "id": "WB-PATH-05",
+      "type": "happy-owner-partial-update",
+      "steps": ["T8"],
+      "coverage": [
+        "Update find-success branch",
+        "Owner authorized branch",
+        "Validator prefill/partial-update branch",
+        "Update persistence branch"
+      ],
+      "requirement_ids": ["R5", "R6", "R11"],
+      "test_intent": "Update only one content field as owner while omitting other fields and tagList.",
+      "expected_internal_effect": "Existing model is loaded with author/tags, omitted fields are prefilled, model.Update changes only supplied content, existing tags are retained, and later retrieve returns updated values."
+    },
+    {
+      "id": "WB-PATH-06",
+      "type": "happy-owner-title-and-tag-replacement",
+      "steps": ["T9", "T11"],
+      "coverage": [
+        "Slug regeneration branch",
+        "Non-empty tag replacement branch",
+        "Current-slug readback risk"
+      ],
+      "requirement_ids": ["R5", "R6", "R11"],
+      "test_intent": "Update the title and replace tags to cover slug regeneration plus tag replacement.",
+      "expected_internal_effect": "Slug changes to slug.Make(new title), Tags is replaced with the supplied tag set, and follow-up reads should use the returned current slug rather than the old slug."
+    },
+    {
+      "id": "WB-PATH-07",
+      "type": "happy-owner-clear-tags",
+      "steps": ["T10"],
+      "coverage": ["Explicit empty tagList branch", "Association clear branch"],
+      "requirement_ids": ["R5", "R6", "R11"],
+      "test_intent": "Update an existing tagged article with tagList: [] and verify the internal clear-tags path.",
+      "expected_internal_effect": "setTags assigns an empty tag slice, model.Update clears tag associations, and the serialized article has an empty tagList while content/author remain intact."
+    },
+    {
+      "id": "WB-PATH-08",
+      "type": "negative-owner-update-validation",
+      "steps": ["T7"],
+      "coverage": [
+        "Update validator failure after ownership branch",
+        "Update skipped branch"
+      ],
+      "requirement_ids": ["R4"],
+      "test_intent": "As the owner, submit an invalid update payload after the article has been found to prove validation protects persisted state.",
+      "expected_internal_effect": "FindOneArticle and ownership check succeed, Bind fails, model.Update is not called, and the active article remains unchanged."
+    },
+    {
+      "id": "WB-PATH-09",
+      "type": "negative-non-owner-write",
+      "steps": ["T6", "T12"],
+      "coverage": [
+        "Update forbidden ownership branch",
+        "Delete forbidden ownership branch",
+        "No-mutation ownership rejection"
+      ],
+      "requirement_ids": ["R7", "R10"],
+      "test_intent": "Use a different authenticated user to attempt update and delete on an existing article.",
+      "expected_internal_effect": "Both handlers compare AuthorID with the requester's ArticleUserModel.ID, return 403, skip Update/DeleteArticleModel, and the article remains active with original content."
+    },
+    {
+      "id": "WB-PATH-10",
+      "type": "negative-unauthenticated-write",
+      "steps": ["T17", "T18"],
+      "coverage": [
+        "Update auth reject branch",
+        "Delete auth reject branch",
+        "Middleware-before-handler path"
+      ],
+      "requirement_ids": ["R7", "R10"],
+      "test_intent": "Attempt update and delete without a token to verify middleware blocks both before handler logic.",
+      "expected_internal_effect": "AuthMiddleware(true) aborts each request with 401; ArticleUpdate and ArticleDelete do not run and the article remains active."
+    },
+    {
+      "id": "WB-PATH-11",
+      "type": "happy-owner-delete-and-observe",
+      "steps": ["T13", "T14", "T15"],
+      "coverage": [
+        "Owner delete success branch",
+        "Post-delete detail not-found branch",
+        "Post-delete list exclusion branch"
+      ],
+      "requirement_ids": ["R8", "R9", "R12"],
+      "test_intent": "Delete an existing owned article and verify the deleted state through detail and list reads.",
+      "expected_internal_effect": "DeleteArticleModel soft-deletes the row by slug; normal FindOneArticle and FindManyArticle paths do not return the deleted article."
+    },
+    {
+      "id": "WB-PATH-12",
+      "type": "missing-slug-edge-cases",
+      "steps": ["T5", "T16"],
+      "coverage": [
+        "Update missing-slug branch",
+        "Delete missing-slug idempotent branch"
+      ],
+      "requirement_ids": [],
+      "test_intent": "Cover source-supported behavior for missing slugs: update fails with not-found while delete is idempotent success.",
+      "expected_internal_effect": "Update stops at FindOneArticle with 404; delete observes missing row, skips ownership check, DeleteArticleModel is a no-op, and returns 200 unless a database error occurs."
+    }
+  ],
+  "coverage_metrics": {
+    "state_coverage_pct": 100.0,
+    "transition_coverage_pct": 100.0,
+    "branch_coverage_pct": 85.7,
+    "path_coverage_pct": 100.0,
+    "raw_metrics": {
+      "covered_states": 6,
+      "total_states": 6,
+      "covered_transitions": 18,
+      "total_transitions": 18,
+      "selected_white_box_paths": 12,
+      "selected_decision_outcomes_covered": 24,
+      "selected_decision_outcomes_total": 24,
+      "excluded_database_error_outcomes": 4,
+      "branch_coverage_basis": "Practical branch coverage over deterministic auth, validation, ownership, existence, and tag-handling branches. Database error branches in SaveOne, model.Update, DeleteArticleModel, and transaction commit are identified but excluded from the minimal suite because they require fault injection rather than normal lifecycle inputs."
+    }
+  },
+  "assumptions": [
+    "The model is source-backed by the golang-gin implementation under Assignment 01/codebases/realworld/implementations/golang-gin; it is not a source-missing logical model.",
+    "Post-delete unavailability relies on GORM default scoped queries for models embedding gorm.Model, so soft-deleted rows are excluded from normal FindOneArticle and FindManyArticle queries."
+  ],
+  "open_questions": [
+    "The code regenerates the slug directly from title without adding a uniqueness suffix; duplicate-title handling may conflict with the unique slug index and should be checked separately from this lifecycle path model.",
+    "The current structured requirements use R1-R12, while the black-box handoff uses an older R1-R16 numbering. Trace links in the report therefore map black-box tests by title/intent as well as by exact IDs where possible.",
+    "DELETE on a non-existent slug returns 200 in source code, which is idempotent but not explicitly specified by the structured requirements."
+  ]
+}

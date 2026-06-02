@@ -26,6 +26,11 @@ Required fields:
 - `integrated`: use member2/member3 formal outputs
 - `orchestrated`: same payload shape, orchestrator-driven trigger
 
+Integrated input paths:
+
+- `Assignment 02/outputs/structured-requirements/article-lifecycle.json`
+- `Assignment 02/outputs/risk-analysis/article-lifecycle/risk-analysis.json`
+
 ## 4. Recommended Orchestrator Flow
 
 1. generate/collect structured requirements (member2)

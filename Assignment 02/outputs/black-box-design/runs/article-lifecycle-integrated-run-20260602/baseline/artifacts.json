@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
   "run_metadata": {
-    "run_id": "A2-BB-ARTICLE-LIFECYCLE-INT-R2",
+    "run_id": "A2-BB-ARTICLE-LIFECYCLE-INT-R0",
     "feature_id": "article-lifecycle",
-    "prompt_version": "v1.2",
-    "revision": 2,
-    "generated_at": "2026-06-02T12:02:00+08:00"
+    "prompt_version": "v1.0",
+    "revision": 0,
+    "generated_at": "2026-06-02T11:40:00+08:00"
   },
   "coverage_items": [
     {
@@ -66,45 +66,12 @@
       "description": "Post-delete detail retrieval failure"
     },
     {
-      "id": "CI-9",
-      "requirement_ids": [
-        "R10"
-      ],
-      "technique": "EP",
-      "description": "Delete unauthorized/non-owner rejection"
-    },
-    {
       "id": "CI-10",
       "requirement_ids": [
         "R11"
       ],
       "technique": "Scenario",
       "description": "Update persistence observable through GET"
-    },
-    {
-      "id": "CI-11",
-      "requirement_ids": [
-        "R12"
-      ],
-      "technique": "Scenario",
-      "description": "Post-delete list observability checks"
-    },
-    {
-      "id": "CI-13",
-      "requirement_ids": [
-        "R7",
-        "R10"
-      ],
-      "technique": "EP",
-      "description": "Unauthorized or non-owner update/delete negative partitions"
-    },
-    {
-      "id": "CI-14",
-      "requirement_ids": [
-        "R12"
-      ],
-      "technique": "Scenario",
-      "description": "Post-delete list observability checks across relevant list queries"
     }
   ],
   "equivalence_partitions": [
@@ -188,26 +155,6 @@
       "description": "Owner delete success",
       "test_case_ids": [
         "TC-014"
-      ]
-    },
-    {
-      "id": "EP-11",
-      "requirement_ids": [
-        "R7"
-      ],
-      "description": "Update rejected for unauthenticated or non-owner actor",
-      "test_case_ids": [
-        "TC-019"
-      ]
-    },
-    {
-      "id": "EP-12",
-      "requirement_ids": [
-        "R10"
-      ],
-      "description": "Delete rejected for unauthenticated or non-owner actor",
-      "test_case_ids": [
-        "TC-020"
       ]
     }
   ],
@@ -403,33 +350,6 @@
       "type": "State",
       "priority": "Medium",
       "title": "Post-delete detail not found"
-    },
-    {
-      "id": "SC-13",
-      "requirement_ids": [
-        "R7"
-      ],
-      "type": "Negative",
-      "priority": "High",
-      "title": "Unauthorized/non-owner update rejected"
-    },
-    {
-      "id": "SC-14",
-      "requirement_ids": [
-        "R10"
-      ],
-      "type": "Negative",
-      "priority": "High",
-      "title": "Unauthorized/non-owner delete rejected"
-    },
-    {
-      "id": "SC-15",
-      "requirement_ids": [
-        "R12"
-      ],
-      "type": "State",
-      "priority": "High",
-      "title": "Deleted article absent from detail and list endpoints"
     }
   ],
   "test_cases": [
@@ -625,44 +545,6 @@
         "GET /articles/{slug} after successful delete"
       ],
       "expected_result": "Retrieval fails or indicates not-found semantics"
-    },
-    {
-      "id": "TC-019",
-      "title": "Update attempt by unauthenticated or non-owner is rejected",
-      "requirement_ids": [
-        "R7"
-      ],
-      "priority": "High",
-      "steps": [
-        "PUT /articles/{slug} without token or with token of a different author"
-      ],
-      "expected_result": "Request is rejected and article state is unchanged"
-    },
-    {
-      "id": "TC-020",
-      "title": "Delete attempt by unauthenticated or non-owner is rejected",
-      "requirement_ids": [
-        "R10"
-      ],
-      "priority": "High",
-      "steps": [
-        "DELETE /articles/{slug} without token or with token of a different author"
-      ],
-      "expected_result": "Request is rejected and article remains available to owner"
-    },
-    {
-      "id": "TC-021",
-      "title": "Deleted article is absent from detail and list reads",
-      "requirement_ids": [
-        "R12"
-      ],
-      "priority": "High",
-      "steps": [
-        "DELETE /articles/{slug} as owner",
-        "GET /articles/{slug}",
-        "GET /articles with global and relevant filtered queries"
-      ],
-      "expected_result": "After successful deletion, detail lookup fails with not-found style semantics and list endpoints do not include the deleted article under global or matching filters."
     }
   ],
   "traceability": [
@@ -729,15 +611,6 @@
       ]
     },
     {
-      "requirement_id": "R7",
-      "coverage_item_id": "CI-13",
-      "technique": "EP",
-      "analysis_id": "EP-11",
-      "test_case_ids": [
-        "TC-019"
-      ]
-    },
-    {
       "requirement_id": "R8",
       "coverage_item_id": "CI-7",
       "technique": "EP",
@@ -756,15 +629,6 @@
       ]
     },
     {
-      "requirement_id": "R10",
-      "coverage_item_id": "CI-9",
-      "technique": "EP",
-      "analysis_id": "EP-12",
-      "test_case_ids": [
-        "TC-020"
-      ]
-    },
-    {
       "requirement_id": "R11",
       "coverage_item_id": "CI-10",
       "technique": "Scenario",
@@ -772,44 +636,14 @@
       "test_case_ids": [
         "TC-015"
       ]
-    },
-    {
-      "requirement_id": "R12",
-      "coverage_item_id": "CI-14",
-      "technique": "Scenario",
-      "analysis_id": "SC-15",
-      "test_case_ids": [
-        "TC-021"
-      ]
     }
   ],
   "coverage_metrics": {
-    "requirement_coverage": 1.0,
+    "requirement_coverage": 0.75,
     "ep_coverage": 1.0,
     "bva_coverage": 1.0,
     "dt_coverage": 1.0,
     "duplicate_case_rate": 0.0
   },
-  "revision_log": [
-    {
-      "revision": 1,
-      "source": "Assignment 02/inputs/review/article-lifecycle-integrated-rev1.json",
-      "designer_action": "interactive_review",
-      "summary": "Added CI-13, CI-14, TC-019, TC-020, and TC-021 to close R7/R10/R12 gaps.",
-      "impact": {
-        "coverage_items_added": 2,
-        "test_cases_added": 3
-      }
-    },
-    {
-      "revision": 2,
-      "source": "Assignment 02/inputs/review/article-lifecycle-integrated-rev2.json",
-      "designer_action": "interactive_review",
-      "summary": "Refined TC-021 expected result and fixed dedicated R12 traceability mapping.",
-      "impact": {
-        "test_cases_modified": 1,
-        "traceability_rows_modified": 1
-      }
-    }
-  ]
+  "revision_log": []
 }

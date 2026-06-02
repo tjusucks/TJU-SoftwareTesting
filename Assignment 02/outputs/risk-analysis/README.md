@@ -10,4 +10,3 @@ Expected filename pattern:
 All files must follow:
 
 - `Assignment 02/schemas/risk-analysis.schema.json`
-

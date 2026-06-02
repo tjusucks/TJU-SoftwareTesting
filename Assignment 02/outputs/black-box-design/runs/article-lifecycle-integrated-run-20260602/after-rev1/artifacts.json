@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
   "run_metadata": {
-    "run_id": "A2-BB-ARTICLE-LIFECYCLE-INT-R2",
+    "run_id": "A2-BB-ARTICLE-LIFECYCLE-INT-R1",
     "feature_id": "article-lifecycle",
-    "prompt_version": "v1.2",
-    "revision": 2,
-    "generated_at": "2026-06-02T12:02:00+08:00"
+    "prompt_version": "v1.1",
+    "revision": 1,
+    "generated_at": "2026-06-02T11:52:00+08:00"
   },
   "coverage_items": [
     {
@@ -662,7 +662,7 @@
         "GET /articles/{slug}",
         "GET /articles with global and relevant filtered queries"
       ],
-      "expected_result": "After successful deletion, detail lookup fails with not-found style semantics and list endpoints do not include the deleted article under global or matching filters."
+      "expected_result": "Deleted article is not returned by detail or list endpoints"
     }
   ],
   "traceability": [
@@ -799,16 +799,6 @@
       "impact": {
         "coverage_items_added": 2,
         "test_cases_added": 3
-      }
-    },
-    {
-      "revision": 2,
-      "source": "Assignment 02/inputs/review/article-lifecycle-integrated-rev2.json",
-      "designer_action": "interactive_review",
-      "summary": "Refined TC-021 expected result and fixed dedicated R12 traceability mapping.",
-      "impact": {
-        "test_cases_modified": 1,
-        "traceability_rows_modified": 1
       }
     }
   ]
