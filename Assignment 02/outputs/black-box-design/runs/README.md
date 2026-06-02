@@ -2,9 +2,14 @@
 
 ## Authoritative Run
 
-- `article-lifecycle-ai-run-20260527/`
+- `article-lifecycle-integrated-run-20260602/`
   - AI skill execution (`execution_mode=ai_skill`)
   - Stages: `baseline/` -> `after-rev1/` -> `final/`
+
+## Historical Run (Standalone)
+
+- `article-lifecycle-ai-run-20260527/`
+  - kept for reference-only comparison
 
 ## Frozen Deliverable
 

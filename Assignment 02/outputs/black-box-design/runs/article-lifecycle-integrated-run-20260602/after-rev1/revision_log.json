@@ -35,24 +35,5 @@
         "summary": "Added detail and list non-observability check after delete."
       }
     ]
-  },
-  {
-    "revision": 2,
-    "source": "Assignment 02/inputs/review/article-lifecycle-integrated-rev2.json",
-    "designer_action": "interactive_review",
-    "changes": [
-      {
-        "action": "modify",
-        "target_type": "test_case",
-        "target_id": "TC-021",
-        "summary": "Refined expected result to explicit detail/list not-found observability semantics."
-      },
-      {
-        "action": "modify",
-        "target_type": "traceability",
-        "target_id": "R12-CI-14",
-        "summary": "Pinned R12 to dedicated list/detail observability check."
-      }
-    ]
   }
 ]

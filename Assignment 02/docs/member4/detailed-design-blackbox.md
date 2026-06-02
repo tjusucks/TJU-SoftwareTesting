@@ -40,6 +40,10 @@ Primary coverage items:
 - tagList decision combinations (omit/empty/null/new values)
 - Persistence checks (update and delete)
 
+ID alignment reference:
+
+- `Assignment 02/docs/member4/requirement-id-mapping.md`
+
 ## 3. Coverage Strategy and Method (ISO 29119-4 aligned)
 
 ### 3.1 Applied Black-Box Techniques
@@ -60,7 +64,7 @@ Primary coverage items:
 
 ### 4.1 Final Case Set
 
-Final frozen set includes 18 cases (`TC-001` to `TC-018`) in:
+Final integrated set includes 19 cases (`TC-001` to `TC-021`, with review-added IDs) in:
 
 - `Assignment 02/outputs/black-box-design/final/article-lifecycle/test-cases.csv`
 
@@ -74,7 +78,7 @@ Highlights:
 
 ### 4.2 Decision Table Example
 
-`DT-1` (`R11`,`R12`,`R13`) conditions:
+`DT-1` (integrated `R6` partial-update semantics) conditions:
 
 - tagList omitted -> preserve tags
 - tagList empty array -> clear tags
@@ -95,7 +99,7 @@ Mapping chain:
 
 Coverage status in final package:
 
-- Requirements covered: 16/16
+- Requirements covered: 12/12
 - Coverage status: all marked `Full`
 
 ## 6. Prompt Design
@@ -116,25 +120,26 @@ Template used:
 
 ## 7. Results Analysis
 
-### 7.1 Baseline (AI, revision 0)
+### 7.1 Baseline (Integrated, revision 0)
 
-- Path: `Assignment 02/outputs/black-box-design/runs/article-lifecycle-ai-run-20260527/baseline/`
+- Path: `Assignment 02/outputs/black-box-design/runs/article-lifecycle-integrated-run-20260602/baseline/`
 - Cases: 16
-- Key gap found during review: missing explicit unauthorized update/delete negatives.
+- Key gap found during review: missing explicit integrated coverage for `R7`, `R10`, and `R12`.
 
 ### 7.2 Final (revision 2)
 
 - Path: `Assignment 02/outputs/black-box-design/final/article-lifecycle/`
-- Cases: 18
-- Added auth-negative branches for update/delete.
-- Refined post-delete expected result wording for verifiability and implementation tolerance.
+- Cases: 19
+- Added auth/ownership negatives for update (`R7`) and delete (`R10`).
+- Added explicit post-delete list observability coverage (`R12`).
+- Refined post-delete expected result wording for detail + list verifiability.
 
 ## 8. Improvement with Evidence
 
 Revision inputs:
 
-- `Assignment 02/inputs/review/article-lifecycle-rev1.json`
-- `Assignment 02/inputs/review/article-lifecycle-rev2.json`
+- `Assignment 02/inputs/review/article-lifecycle-integrated-rev1.json`
+- `Assignment 02/inputs/review/article-lifecycle-integrated-rev2.json`
 
 Revision log:
 
@@ -142,12 +147,12 @@ Revision log:
 
 ### 8.1 Before/After Summary
 
-| Aspect                      | Baseline v1          | Final v2                            | Improvement             |
-| --------------------------- | -------------------- | ----------------------------------- | ----------------------- |
-| Test case count             | 16                   | 18                                  | Added `TC-017`,`TC-018` |
-| Update auth negative        | Not explicit         | Explicit                            | Added EP-11 branch      |
-| Delete auth negative        | Not explicit         | Explicit                            | Added EP-12 branch      |
-| Post-delete expected result | Generic fail wording | Not-found style, verifiable wording | Better oracle clarity   |
+| Aspect                      | Baseline v1 | Final v2 | Improvement |
+| --------------------------- | ----------- | -------- | ----------- |
+| Test case count             | 16          | 19       | Added `TC-019`,`TC-020`,`TC-021` |
+| Update auth/ownership neg   | Missing     | Explicit | Added dedicated `R7` branch (`EP-11`) |
+| Delete auth/ownership neg   | Missing     | Explicit | Added dedicated `R10` branch (`EP-12`) |
+| Post-delete list visibility | Missing     | Explicit | Added integrated `R12` observability case |
 
 ## 9. Handoff to Execution (Member5)
 
@@ -164,7 +169,7 @@ Execution target remains implementation-neutral and can be applied to both ASP.N
 
 Authoritative AI run:
 
-- `Assignment 02/outputs/black-box-design/runs/article-lifecycle-ai-run-20260527/`
+- `Assignment 02/outputs/black-box-design/runs/article-lifecycle-integrated-run-20260602/`
 
 Execution evidence:
 
@@ -173,27 +178,29 @@ Execution evidence:
 
 Execution type:
 
-- Runtime: Cursor Agent
 - Mode: `ai_skill`
+- Input mode: `integrated`
 - Skill: `Assignment 02/skills/black-box-design/SKILL.md`
 
 Pipeline result:
 
 - Baseline AI generation: 16 cases (`revision=0`, prompt `v1.0`)
-- Designer rev1: 18 cases (`revision=1`, prompt `v1.1`)
-- Designer rev2 + final freeze: 18 cases (`revision=2`, prompt `v1.2`)
-- Requirement coverage: `16/16` (`1.0`)
+- Designer rev1: 19 cases (`revision=1`, prompt `v1.1`)
+- Designer rev2 + final freeze: 19 cases (`revision=2`, prompt `v1.2`)
+- Requirement coverage: `12/12` (`1.0`)
 
 ## 11. Sections Owned by Member5 (Placeholders)
 
 ### 11.1 White-Box Test Design
 
-To be completed by member5.
+Completed by member5 at:
+
+- `Assignment 02/outputs/white-box-modeling/article-lifecycle/`
 
 ### 11.2 Test Tool Implementation and Execution Results
 
-To be completed by member5.
+Pending member5 execution against the updated integrated black-box final package.
 
 ### 11.3 Final Execution Result Analysis
 
-To be completed by member5.
+Pending member5 test execution summary and defect/smoke analysis.
