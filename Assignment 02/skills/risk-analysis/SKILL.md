@@ -12,7 +12,7 @@ This skill evaluates structured requirements and determines testing priorities u
 
 The skill consumes requirement specifications produced by the Requirement Structuring skill and generates risk analysis artifacts for test planning and downstream test design.
 
-The design follows ISTQB risk-based testing principles and supports Assignment 02 FR 2.0.
+The design follows ISTQB risk-based testing principles.
 
 **The risk analysis workflow handles:**
 
@@ -172,15 +172,18 @@ Input provided by orchestrator:
 
 Machine output must follow:
 
-- `Assignment 02/schemas/risk-analysis.schema.json`
+- `schemas/risk-analysis.schema.json`
 
-Output Directory:outputs/risk-analysis/{feature_id}/
+### Output Directory
 
+```
+outputs/risk-analysis/{feature_id}/
 ├── risk-analysis.json
 ├── report.md
-└── revision_log.json
+└── revision_log.json   # present only if revisions were applied
+```
 
-Example Output Structure：
+### Example Output Structure
 
 ```json
 {
@@ -296,7 +299,7 @@ Used for:
 
 ### Handoff to Black-Box Design
 
-Member4 consumes:
+Black-box design consumes:
 
 - requirement_id
 - risk_id
