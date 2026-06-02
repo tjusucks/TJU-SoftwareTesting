@@ -14,8 +14,7 @@ stage by stage, with interactive review after each stage.
 
 You do NOT perform the detailed work of each stage yourself. Instead:
 
-- For stages with a dedicated sub-skill, follow that skill's workflow.
-- For stages without a dedicated skill, use the inline fallback instructions in this file.
+- For each stage, follow the dedicated sub-skill's workflow.
 - Between stages, pause for designer review and accept revisions.
 
 ## Accepting User Input
@@ -43,45 +42,18 @@ understand and infer:
 
 ### Stage 2: Risk Analysis
 
-**Sub-skill**: not yet available — use inline fallback.
+**Sub-skill**: `risk-analysis`
 
-**Fallback behavior**:
-
-1. Check if `inputs/reference/risk-analysis/{feature_id}.json` exists.
-   - If yes: load it and present to the designer as the baseline risk assessment.
-   - If no: generate a lightweight risk assessment using the rules below.
-2. Write output to `outputs/risk-analysis/{feature_id}/`.
-3. **Pause for review.**
-
-**Inline risk assessment rules** (used only when no reference data and no dedicated skill):
-
-For each requirement from Stage 1, assign:
-
-- **Risk level** (High / Medium / Low) based on:
-  - High: authentication, authorization, data integrity, core write operations
-  - Medium: validation, persistence, list/query consistency
-  - Low: display, formatting, non-critical UX
-- **Test priority** matching risk level.
-- **Rationale**: one sentence explaining the risk assignment.
-
-Output format:
-
-```json
-{
-  "feature_id": "...",
-  "requirements_risk": [
-    {
-      "requirement_id": "R1",
-      "risk_level": "High",
-      "test_priority": "High",
-      "rationale": "..."
-    }
-  ]
-}
-```
-
-When a dedicated `risk-analysis` skill becomes available, this fallback is
-replaced by that skill's workflow.
+1. Construct the risk-analysis input configuration:
+   - `feature_id` from user input.
+   - `input_mode`: `orchestrated`.
+   - `structured_requirements_path`: Stage 1 output.
+2. Execute the risk-analysis workflow as defined in its SKILL.md.
+3. Write output to `outputs/risk-analysis/{feature_id}/`.
+4. Present a summary: risk score distribution, high/medium/low counts, top risks.
+5. **Pause for review.**
+6. If revisions are provided (e.g., adjust impact, likelihood, or priority), apply and re-present.
+7. On confirmation, proceed to Stage 3.
 
 ### Stage 3: Black-Box Design
 

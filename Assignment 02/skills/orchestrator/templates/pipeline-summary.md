@@ -26,8 +26,6 @@
 | -------------- | ---------- | ------------- | --------- |
 | R1             |            |               |           |
 
-- Risk source: skill / fallback / reference data
-
 (Source: Stage 2 — Risk Analysis)
 
 ## 4. Black-Box Design Metrics
@@ -49,14 +47,14 @@
 
 ## 5. White-Box Modeling Summary
 
-| Metric                 | Count |
-| ---------------------- | ----- |
-| States                 |       |
-| Transitions            |       |
-| Nodes                  |       |
-| Edges                  |       |
-| Test Paths             |       |
-| Executable Test Cases   |       |
+| Metric                | Count |
+| --------------------- | ----- |
+| States                |       |
+| Transitions           |       |
+| Nodes                 |       |
+| Edges                 |       |
+| Test Paths            |       |
+| Executable Test Cases |       |
 
 - Coverage criterion:
 - Model type: state transition / control flow
