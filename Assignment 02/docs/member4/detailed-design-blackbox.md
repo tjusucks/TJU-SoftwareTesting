@@ -147,11 +147,11 @@ Revision log:
 
 ### 8.1 Before/After Summary
 
-| Aspect                      | Baseline v1 | Final v2 | Improvement |
-| --------------------------- | ----------- | -------- | ----------- |
-| Test case count             | 16          | 19       | Added `TC-019`,`TC-020`,`TC-021` |
-| Update auth/ownership neg   | Missing     | Explicit | Added dedicated `R7` branch (`EP-11`) |
-| Delete auth/ownership neg   | Missing     | Explicit | Added dedicated `R10` branch (`EP-12`) |
+| Aspect                      | Baseline v1 | Final v2 | Improvement                               |
+| --------------------------- | ----------- | -------- | ----------------------------------------- |
+| Test case count             | 16          | 19       | Added `TC-019`,`TC-020`,`TC-021`          |
+| Update auth/ownership neg   | Missing     | Explicit | Added dedicated `R7` branch (`EP-11`)     |
+| Delete auth/ownership neg   | Missing     | Explicit | Added dedicated `R10` branch (`EP-12`)    |
 | Post-delete list visibility | Missing     | Explicit | Added integrated `R12` observability case |
 
 ## 9. Handoff to Execution (Member5)
