@@ -15,6 +15,3 @@ TC-013,Non-empty tagList replaces tags,R6,Medium,PUT update payload with tagList
 TC-014,Owner delete succeeds,R8,High,DELETE /articles/{slug} with owner token,Delete succeeds with success status
 TC-015,Updated article remains updated,R11,Medium,GET /articles/{slug} after successful update,GET response reflects updated state
 TC-016,Deleted article cannot be fetched,R9,Medium,GET /articles/{slug} after successful delete,Retrieval fails or indicates not-found semantics
-TC-019,Update attempt by unauthenticated or non-owner is rejected,R7,High,PUT /articles/{slug} without token or with token of a different author,Request is rejected and article state is unchanged
-TC-020,Delete attempt by unauthenticated or non-owner is rejected,R10,High,DELETE /articles/{slug} without token or with token of a different author,Request is rejected and article remains available to owner
-TC-021,Deleted article is absent from detail and list reads,R12,High,DELETE as owner then GET detail and GET list with relevant filters,"After successful deletion, detail lookup fails with not-found style semantics and list endpoints do not include the deleted article under global or matching filters."

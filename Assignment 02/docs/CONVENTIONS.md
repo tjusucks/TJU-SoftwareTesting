@@ -1,10 +1,10 @@
-# Assignment 02 Black-Box Conventions (Member4 Baseline)
+# Assignment 02 Black-Box Conventions (Member4)
 
 This document defines the baseline contract for the Assignment 02 black-box
 design pipeline owned by member4.
 
-The goal is simple: member4 can run the full pipeline independently (standalone
-mode), and other members can adapt their outputs to this contract later.
+The goal is simple: member4 can run the pipeline independently in standalone mode,
+and align to integrated mode when member2/member3 formal outputs are available.
 
 ## 1. Ownership and Adaptation Rule
 
@@ -63,6 +63,16 @@ The skill supports three modes:
    - Same payload shape, invoked by member1 orchestrator.
 
 If `integrated` files are missing, fallback to `standalone` inputs.
+
+Integrated article-lifecycle formal paths:
+
+- `Assignment 02/outputs/structured-requirements/article-lifecycle.json`
+- `Assignment 02/outputs/risk-analysis/article-lifecycle/risk-analysis.json`
+
+Final frozen package status:
+
+- Current authoritative final package is integrated and based on `R1`-`R12`.
+- Standalone `inputs/reference/*` remains available only as fallback.
 
 ## 5. Priority Defaults (Risk Fallback)
 

@@ -1,6 +1,9 @@
-# Article Lifecycle AI Skill Run (2026-05-27)
+# Article Lifecycle AI Skill Run (2026-05-27, Historical)
 
 This directory contains an **AI-driven** execution of the `black-box-design` skill.
+
+> Status: superseded by `Assignment 02/outputs/black-box-design/runs/article-lifecycle-integrated-run-20260602/`.
+> Keep this directory only as standalone/reference history.
 
 - Runtime: Cursor Agent
 - Skill: `Assignment 02/skills/black-box-design/SKILL.md`

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "feature_id": "article-lifecycle",
+  "revision": 2,
+  "designer_revisions": [
+    {
+      "action": "modify",
+      "target_type": "test_case",
+      "target_id": "TC-021",
+      "payload": {
+        "expected_result": "After successful deletion, detail lookup fails with not-found style semantics and list endpoints do not include the deleted article under global or matching filters."
+      },
+      "reason": "Make R12 expectation verifiable while remaining implementation-neutral."
+    },
+    {
+      "action": "modify",
+      "target_type": "traceability",
+      "target_id": "R12-CI-14",
+      "payload": {
+        "test_case_ids": ["TC-021"]
+      },
+      "reason": "Pin dedicated R12 observability trace to the integrated list/detail check."
+    }
+  ]
+}

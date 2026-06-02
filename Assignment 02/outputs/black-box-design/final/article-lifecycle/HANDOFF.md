@@ -15,10 +15,11 @@ This package provides implementation-neutral black-box inputs for execution.
 ## Execution Notes
 
 - Focus module: article lifecycle (`POST/PUT/DELETE/GET /articles/{slug}`).
-- Final package source: AI skill run at `runs/article-lifecycle-ai-run-20260527/final/`.
+- Final package source: AI integrated run at `runs/article-lifecycle-integrated-run-20260602/final/`.
 - See `RUN_LOG.json` for AI execution metadata (`execution_mode=ai_skill`).
 - Do not rely on internal source code details during assertion design.
 - Preserve test IDs (`TC-*`) and requirement IDs (`R*`) in execution reports.
+- Requirement IDs follow integrated upstream (`R1`-`R12`). If you were using older `R1`-`R16` references, use `docs/member4/requirement-id-mapping.md` for alignment.
 - If implementation behavior differs, classify as:
   - spec mismatch
   - environment/setup issue

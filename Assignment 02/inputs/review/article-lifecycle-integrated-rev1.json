@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "feature_id": "article-lifecycle",
+  "revision": 1,
+  "designer_revisions": [
+    {
+      "action": "add",
+      "target_type": "coverage_item",
+      "target_id": null,
+      "payload": {
+        "id": "CI-13",
+        "requirement_ids": ["R7", "R10"],
+        "technique": "EP",
+        "description": "Unauthorized or non-owner update/delete negative partitions"
+      },
+      "reason": "Ensure explicit ownership/auth negative coverage for edit and delete branches."
+    },
+    {
+      "action": "add",
+      "target_type": "coverage_item",
+      "target_id": null,
+      "payload": {
+        "id": "CI-14",
+        "requirement_ids": ["R12"],
+        "technique": "Scenario",
+        "description": "Post-delete list observability checks across relevant list queries"
+      },
+      "reason": "Integrated R12 requires list-level non-observability after delete."
+    },
+    {
+      "action": "add",
+      "target_type": "test_case",
+      "target_id": null,
+      "payload": {
+        "id": "TC-019",
+        "title": "Update attempt by unauthenticated or non-owner is rejected",
+        "requirement_ids": ["R7"],
+        "priority": "High",
+        "steps": [
+          "PUT /articles/{slug} without token or with token of a different author"
+        ],
+        "expected_result": "Request is rejected and article state is unchanged"
+      },
+      "reason": "Strengthen explicit negative evidence for integrated R7."
+    },
+    {
+      "action": "add",
+      "target_type": "test_case",
+      "target_id": null,
+      "payload": {
+        "id": "TC-020",
+        "title": "Delete attempt by unauthenticated or non-owner is rejected",
+        "requirement_ids": ["R10"],
+        "priority": "High",
+        "steps": [
+          "DELETE /articles/{slug} without token or with token of a different author"
+        ],
+        "expected_result": "Request is rejected and article remains available to owner"
+      },
+      "reason": "Strengthen explicit negative evidence for integrated R10."
+    },
+    {
+      "action": "add",
+      "target_type": "test_case",
+      "target_id": null,
+      "payload": {
+        "id": "TC-021",
+        "title": "Deleted article is absent from detail and list reads",
+        "requirement_ids": ["R12"],
+        "priority": "High",
+        "steps": [
+          "DELETE /articles/{slug} as owner",
+          "GET /articles/{slug}",
+          "GET /articles with global and relevant filtered queries"
+        ],
+        "expected_result": "Deleted article is not returned by detail or list endpoints"
+      },
+      "reason": "Add explicit list observability coverage required by integrated R12."
+    }
+  ]
+}

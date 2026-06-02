@@ -1,0 +1,13 @@
+{
+  "execution_mode": "ai_skill",
+  "skill": "black-box-design",
+  "operator": "Member4",
+  "run_id": "A2-BB-ARTICLE-LIFECYCLE-INT-R1",
+  "generated_at": "2026-06-02T11:52:00+08:00",
+  "prompt_version": "v1.1",
+  "revision": 1,
+  "input": "Assignment 02/outputs/black-box-design/runs/article-lifecycle-integrated-run-20260602/after-rev1/black-box-input.json",
+  "review_source": "Assignment 02/inputs/review/article-lifecycle-integrated-rev1.json",
+  "test_case_count": 19,
+  "requirement_coverage": 1.0
+}

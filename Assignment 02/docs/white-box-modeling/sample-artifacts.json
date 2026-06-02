@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.1",
+  "run_metadata": {
+    "run_id": "A2-WB-<FEATURE>-R<rev>",
+    "feature_id": "article-lifecycle",
+    "prompt_version": "v1.2",
+    "revision": 0,
+    "generated_at": "2026-06-01"
+  },
+  "model_type": "state",
+  "states": [
+    {
+      "id": "S1",
+      "name": "Draft",
+      "notes": "Initial state of the article"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "T1",
+      "from": "S1",
+      "to": "S2",
+      "guard": "user_role == 'editor'",
+      "action": "publish_event()",
+      "requirement_ids": ["R1"]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "N1",
+      "type": "decision",
+      "description": "Is title length > 0?",
+      "notes": "Conditional branch in validation method"
+    }
+  ],
+  "edges": [
+    {
+      "id": "E1",
+      "from": "N1",
+      "to": "N2",
+      "condition": "True",
+      "requirement_ids": ["R2"]
+    }
+  ],
+  "paths": [
+    {
+      "id": "WB-PATH-01",
+      "type": "transition",
+      "steps": ["S1 -> S2"],
+      "coverage": ["transition"],
+      "requirement_ids": ["R1"],
+      "test_intent": "Verify that a draft can transition to published when requested by an editor",
+      "expected_internal_effect": "State field changes to PUBLISHED, message is added to queue"
+    }
+  ],
+  "coverage_metrics": {
+    "state_coverage_pct": 100.0,
+    "transition_coverage_pct": 85.0,
+    "branch_coverage_pct": null,
+    "raw_metrics": {
+      "covered_states": 4,
+      "total_states": 4,
+      "covered_transitions": 6,
+      "total_transitions": 7
+    }
+  },
+  "assumptions": [
+    "Assume database transaction rolls back automatically on state transition failure."
+  ],
+  "open_questions": [
+    "Is there a timeout constraint for the pending verification state?"
+  ]
+}

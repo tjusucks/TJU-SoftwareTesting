@@ -6,7 +6,7 @@
   "generated_at": "2026-06-02T12:02:00+08:00",
   "prompt_version": "v1.2",
   "revision": 2,
-  "input": "Assignment 02/outputs/black-box-design/final/article-lifecycle/black-box-input.json",
+  "input": "Assignment 02/outputs/black-box-design/runs/article-lifecycle-integrated-run-20260602/final/black-box-input.json",
   "review_sources": [
     "Assignment 02/inputs/review/article-lifecycle-integrated-rev1.json",
     "Assignment 02/inputs/review/article-lifecycle-integrated-rev2.json"

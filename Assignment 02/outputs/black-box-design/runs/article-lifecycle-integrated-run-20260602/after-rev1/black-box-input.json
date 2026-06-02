@@ -6,7 +6,7 @@
   "structured_requirements_path": "Assignment 02/outputs/structured-requirements/article-lifecycle.json",
   "risk_analysis_path": "Assignment 02/outputs/risk-analysis/article-lifecycle/risk-analysis.json",
   "review_context": {
-    "revision": 0,
-    "designer_revisions_path": null
+    "revision": 1,
+    "designer_revisions_path": "Assignment 02/inputs/review/article-lifecycle-integrated-rev1.json"
   }
 }
