@@ -10,28 +10,28 @@
 
 ## Requirement Inventory
 
-| ID | Description | Risk Categories | Score | Priority |
-|----|-------------|-----------------|-------|----------|
-| R1 | Creating an article requires authentication | Authentication, Authorization | 8 | Medium |
-| R2 | Authenticated author can create an article with valid data | BusinessLogic, DataPersistence, InputValidation | 8 | Medium |
-| R3 | Created article responses include identity, content, metadata, author info | APIContract, DataIntegrity | 6 | Low |
-| R4 | Invalid/missing required fields are rejected | InputValidation, ErrorHandling | 12 | Medium |
-| R5 | Owning author can edit an existing article | Authorization, BusinessLogic, DataPersistence | 8 | Medium |
-| R6 | Article updates preserve unchanged fields | DataIntegrity, BusinessLogic | 9 | Medium |
-| R7 | Edit attempts by unauthenticated/non-owners are rejected | Authentication, Authorization, ErrorHandling | 15 | High |
-| R8 | Owning author can delete an existing article | Authorization, BusinessLogic, DataPersistence | 8 | Medium |
-| R9 | After deletion, article not returned as active | DataIntegrity, StateTransition | 12 | Medium |
-| R10 | Delete attempts by unauthenticated/non-owners are rejected | Authentication, Authorization, ErrorHandling | 15 | High |
-| R11 | After update, later reads return persisted updated values | DataPersistence, DataIntegrity, StateTransition | 12 | Medium |
-| R12 | After deletion, article not observable through detail or list reads | DataIntegrity, StateTransition, APIContract | 12 | Medium |
+| ID  | Description                                                                | Risk Categories                                 | Score | Priority |
+| --- | -------------------------------------------------------------------------- | ----------------------------------------------- | ----- | -------- |
+| R1  | Creating an article requires authentication                                | Authentication, Authorization                   | 8     | Medium   |
+| R2  | Authenticated author can create an article with valid data                 | BusinessLogic, DataPersistence, InputValidation | 8     | Medium   |
+| R3  | Created article responses include identity, content, metadata, author info | APIContract, DataIntegrity                      | 6     | Low      |
+| R4  | Invalid/missing required fields are rejected                               | InputValidation, ErrorHandling                  | 12    | Medium   |
+| R5  | Owning author can edit an existing article                                 | Authorization, BusinessLogic, DataPersistence   | 8     | Medium   |
+| R6  | Article updates preserve unchanged fields                                  | DataIntegrity, BusinessLogic                    | 9     | Medium   |
+| R7  | Edit attempts by unauthenticated/non-owners are rejected                   | Authentication, Authorization, ErrorHandling    | 15    | High     |
+| R8  | Owning author can delete an existing article                               | Authorization, BusinessLogic, DataPersistence   | 8     | Medium   |
+| R9  | After deletion, article not returned as active                             | DataIntegrity, StateTransition                  | 12    | Medium   |
+| R10 | Delete attempts by unauthenticated/non-owners are rejected                 | Authentication, Authorization, ErrorHandling    | 15    | High     |
+| R11 | After update, later reads return persisted updated values                  | DataPersistence, DataIntegrity, StateTransition | 12    | Medium   |
+| R12 | After deletion, article not observable through detail or list reads        | DataIntegrity, StateTransition, APIContract     | 12    | Medium   |
 
 ## Risk Summary
 
-| Priority | Count | Requirements |
-|----------|-------|-------------|
-| **High** | 2 | R7, R10 |
-| **Medium** | 9 | R1, R2, R4, R5, R6, R8, R9, R11, R12 |
-| **Low** | 1 | R3 |
+| Priority   | Count | Requirements                         |
+| ---------- | ----- | ------------------------------------ |
+| **High**   | 2     | R7, R10                              |
+| **Medium** | 9     | R1, R2, R4, R5, R6, R8, R9, R11, R12 |
+| **Low**    | 1     | R3                                   |
 
 ### Risk Score Distribution
 
@@ -50,6 +50,7 @@ Authorization boundary enforcement for edit operations. Owner-check logic is a w
 **Rationale:** Impact is critical (5) because unauthorized modification compromises data integrity and trust. Likelihood is possible (3) because ownership verification logic varies across implementations and edge cases (slug changes, user identity resolution) are error-prone.
 
 **Recommendations:**
+
 - Dedicate focused security test scenarios for edit authorization
 - Include negative tests for token manipulation and non-owner access
 - Automate authorization checks as regression tests
@@ -63,6 +64,7 @@ Authorization boundary enforcement for delete operations. Mirrors R7 in severity
 **Rationale:** Same rationale as R7 — critical impact (5) due to permanent data loss, possible likelihood (3) due to implementation variability in ownership checks.
 
 **Recommendations:**
+
 - Pair with R7 authorization testing for efficiency
 - Verify article existence after rejected delete attempts
 - Test concurrent delete attempts from multiple sessions
@@ -121,12 +123,12 @@ Response field completeness affects client integration but does not affect serve
 
 ## Risk Scoring Rationale
 
-| Factor | Description |
-|--------|-------------|
-| **Impact Scale** | Business/security consequences of requirement failure, scored 1–5 |
-| **Likelihood Scale** | Probability of defect or failure occurrence, scored 1–5 |
-| **Risk Score** | Impact × Likelihood (range: 1–25) |
-| **Priority Mapping** | High (15–25), Medium (8–14), Low (1–7) |
+| Factor               | Description                                                       |
+| -------------------- | ----------------------------------------------------------------- |
+| **Impact Scale**     | Business/security consequences of requirement failure, scored 1–5 |
+| **Likelihood Scale** | Probability of defect or failure occurrence, scored 1–5           |
+| **Risk Score**       | Impact × Likelihood (range: 1–25)                                 |
+| **Priority Mapping** | High (15–25), Medium (8–14), Low (1–7)                            |
 
 Security boundaries (R7, R10) received the highest scores because authorization failures have critical business impact and non-trivial likelihood of implementation defects. Input validation (R4) and data integrity requirements (R9, R11, R12) scored medium-high (12) due to specification ambiguity documented in the structured requirements. Standard CRUD operations (R1, R2, R5, R8) scored medium (8) — important but less likely to fail. Response formatting (R3) scored low (6) as it follows standard conventions.
 
